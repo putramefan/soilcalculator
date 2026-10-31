@@ -1,0 +1,2892 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOILS Calculator PRO — Soil Practicum Workspace</title>
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="js/sound.js"></script>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Cpath d='M6 25h20M4 21h24M8 29h16' stroke='%236F4E37' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M16 21V9c0-3.5 3-6 6-6 0 3.5-2.5 6-6 6z' fill='%23748568'/%3E%3Cpath d='M16 14c-3 0-5-2-5-5 3 0 5 2 5 5z' fill='%23A67C52'/%3E%3Ccircle cx='16' cy='21' r='1.5' fill='%236F4E37'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css?v=20261024_cat">
+  <link rel="stylesheet" href="css/about.css?v=1">
+</head>
+<body>
+
+<div class="soils-hero"><div class="logo">🌱</div><div><h1>SOILS CALCULATOR PRO</h1><p>Kalkulator Praktikum Ilmu Tanah • Step by Step Otomatis</p></div></div>
+
+
+
+<h1>Kalkulator interpretasi data tanah — lengkap</h1>
+<p class="subtitle">108 kalkulator &amp; referensi — kimia, fisika, biologi, dan identifikasi morfologi tanah, diagnosis soil health terpadu, air &amp; irigasi, laboratorium, olah data mentah, statistik data, konversi satuan, serta referensi &amp; edukasi Ilmu Tanah — untuk laporan praktikum Ilmu Tanah. 100% offline, semua hitungan jalan di browser sendiri.</p>
+
+<!-- ===== Soil Practical Assistant tools ===== -->
+<div class="app-tools">
+  <div class="soils-workspace-grid-top">
+    <div class="soils-panel-card">
+      <div class="soils-panel-head">
+        <div class="soils-panel-icon-badge" style="background-color:var(--badge-kimia);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="soils-panel-title">
+          <h3>Profil Sampel &amp; Data Bersama</h3>
+          <p>Masukkan informasi umum untuk semua sampel dalam batch.</p>
+        </div>
+      </div>
+      <div class="sample-grid-3col">
+        <div>
+          <label>Nama/kode sampel</label>
+          <div class="input-with-icon">
+            <span class="input-icon">🏷️</span>
+            <input id="spa-sample-name" placeholder="Contoh: S-01, Lahan A, dll.">
+          </div>
+        </div>
+        <div>
+          <label>Lokasi</label>
+          <div class="input-with-icon">
+            <span class="input-icon">📍</span>
+            <input id="spa-location" placeholder="Contoh: Kebun, Hutan, dll.">
+          </div>
+        </div>
+        <div>
+          <label>Kedalaman</label>
+          <div class="input-with-icon">
+            <span class="input-icon">📏</span>
+            <input id="spa-depth" placeholder="misal: 0–20 cm">
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+        <button type="button" class="btn-outline" onclick="spaSaveSample()"><span class="icon">💾</span> Simpan profil</button>
+        <button type="button" class="btn-outline" onclick="spaLoadSample()"><span class="icon">📁</span> Muat sampel terakhir</button>
+        <button type="button" class="btn-outline" onclick="spaClearProfile()"><span class="icon">🔄</span> Bersihkan</button>
+      </div>
+      <div class="sample-list" id="spa-sample-list"></div>
+      <div class="status-line" id="spa-status" style="font-size:12px;color:var(--text-muted);margin-top:8px;">ⓘ Belum ada sampel tersimpan.</div>
+    </div>
+
+    <div class="soils-panel-card">
+      <div class="soils-panel-head">
+        <div class="soils-panel-icon-badge" style="background-color:var(--badge-kimia);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="soils-panel-title">
+          <h3>Mode Laporan Praktikum</h3>
+          <p>Kumpulkan hasil kalkulator yang sudah dihitung menjadi satu ringkasan yang siap dicetak atau diunduh.</p>
+        </div>
+      </div>
+      <div class="soils-choice-cards-grid">
+        <div class="soils-choice-card active" onclick="spaOpenReport()">
+          <div class="choice-head">
+            <span class="choice-icon">📄</span>
+            <span class="choice-check">✓</span>
+          </div>
+          <strong>Buat laporan</strong>
+          <small>Hasil dalam format siap pakai.</small>
+        </div>
+        <div class="soils-choice-card" onclick="spaUseCommonData()">
+          <div class="choice-head">
+            <span class="choice-icon">📊</span>
+          </div>
+          <strong>Isi data umum</strong>
+          <small>Tambah informasi sampel (opsional).</small>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:6px;margin-top:10px;">
+        <span>ⓘ</span> Mode offline • Data tersimpan lokal di browser ini
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- BATCH RAW DATA + AUTO CALCULATE -->
+<section id="batchRawWorkspace" style="display:none !important;">
+  <select id="batchMethod"><option value="C">C-organik</option></select>
+  <input id="batchCount" type="number" value="5">
+  <div id="batchTableWrap"></div>
+  <div id="batchSummary"></div>
+  <span id="batchStatus"></span>
+  <textarea id="batchPasteInput"></textarea>
+</section>
+
+
+<!-- ===== UNIVERSAL BATCH CALCULATOR v2 ===== -->
+<section class="ub2" id="universalBatchWorkspace">
+  <div class="ub2-config-row" style="margin-bottom:16px;">
+     <div style="margin-bottom:10px;">
+       <label for="ub2Search" style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:6px; display:block;">Cari Metode</label>
+       <input id="ub2Search" class="soils-search-input" type="search" placeholder="Ketik untuk memfilter metode..." autocomplete="off" style="width:100%; height:40px; padding:0 12px; border-radius:8px; border:1px solid var(--border-medium); background:var(--bg-card); color:var(--text-main); font-size:13.5px; box-sizing:border-box;">
+     </div>
+     <div>
+       <label for="ub2Method" style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:6px; display:block;">Pilih Metode Perhitungan</label>
+       <select id="ub2Method" style="width:100%; height:44px; padding:0 12px; border-radius:8px; border:1px solid var(--border-medium); background:var(--bg-card); color:var(--text-main); font-size:13.5px; box-sizing:border-box;"></select>
+     </div>
+  </div>
+  
+  <div class="ub2-data-card">
+    <div class="ub2-card-head">
+       <div>
+         <h3>Data sampel</h3>
+         <p style="font-size:12px;color:var(--text-muted);margin:3px 0 0;">Pastikan semua kolom diisi.</p>
+       </div>
+       <div class="ub2-import-btns">
+         <button type="button" class="btn-outline btn-sm" onclick="SOILS_UBATCH2.addRow()">+ Tambah sampel</button>
+         <button type="button" class="btn-outline btn-sm" onclick="SOILS_UBATCH2.openPaste()">Paste dari Excel</button>
+         <button type="button" class="btn-outline btn-sm" onclick="document.getElementById('ub2FileInput').click()">Import file</button>
+         <input type="file" id="ub2FileInput" style="display:none" accept=".xlsx,.xls,.csv,.txt,.tsv" onchange="SOILS_UBATCH2.importFile(this)">
+       </div>
+    </div>
+    
+    <div id="ub2TableWrap" class="ub2-table"></div>
+    
+    <div class="ub2-footer">
+       <span id="ub2Status"></span>
+       <button type="button" class="btn-outline btn-sm" onclick="SOILS_UBATCH2.exportCSV()" style="height:44px;padding:0 14px;">Ekspor Hasil</button>
+       <button type="button" class="ub2-primary" onclick="SOILS_UBATCH2.calculate()">Hitung</button>
+    </div>
+  </div>
+  <div id="ub2Summary"></div>
+  <div id="ub2Meta" style="display:none;"></div>
+  
+  <div class="ub2-paste" id="ub2PasteBox" style="display:none; padding:16px; border:1px solid var(--border-medium); border-radius:8px; background:var(--bg-card); margin-bottom:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <strong style="font-size:12px; color:var(--accent-gold);">PASTE TABEL EXCEL / CSV</strong>
+      <button type="button" style="border:none;background:transparent;color:var(--text-muted);cursor:pointer;" onclick="SOILS_UBATCH2.closePaste()">✕</button>
+    </div>
+    <textarea id="ub2PasteInput" style="width:100%; height:100px; font-family:monospace; font-size:12px; padding:8px; box-sizing:border-box; background:transparent; border:1px solid var(--border-subtle); color:var(--text-main);" placeholder="Tempel teks tab-separated di sini..."></textarea>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+      <span id="ub2PasteHint" style="font-size:11.5px; color:var(--text-muted);">Format: Kolom sesuai tabel kalkulator</span>
+      <button type="button" class="ub2-primary" style="height:32px; padding:0 14px; font-size:12px;" onclick="SOILS_UBATCH2.importPaste()">Proses Data</button>
+    </div>
+  </div>
+  <input id="ub2Count" type="hidden" value="4">
+</section>
+
+
+<!-- ===== RAW DATA WORKSPACE ===== -->
+<div class="raw-workspace" id="raw-data-workspace" style="margin-top:24px;">
+  <div class="soils-panel-head">
+    <div class="soils-panel-icon-badge" style="background-color:var(--badge-kimia);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v6L4.5 18A2 2 0 0 0 6.2 21h11.6a2 2 0 0 0 1.7-3L14 8V2h-4z"/><path d="M8 14h8"/></svg>
+    </div>
+    <div class="soils-panel-title">
+      <h3>RAW DATA WORKSPACE</h3>
+      <p>Masukkan data mentah praktikum sesuai dengan format yang dipilih (misalnya: hitung → simpan hasil).</p>
+    </div>
+  </div>
+
+  <div class="raw-body">
+    <div class="raw-grid">
+      <div>
+        <label>Nama / kode sampel</label>
+        <div class="input-with-icon">
+          <span class="input-icon">📋</span>
+          <input id="raw-sample" placeholder="misal: Sampel A — 0–20 cm">
+        </div>
+      </div>
+      <div>
+        <label>Parameter / metode</label>
+        <div class="input-with-icon">
+          <span class="input-icon">🧪</span>
+          <select id="raw-method" onchange="rawRenderFields()">
+            <option value="corg">C-organik — Walkley &amp; Black</option>
+            <option value="ntotal">N-total — Kjeldahl</option>
+            <option value="p">P-tersedia — Kurva Standar</option>
+            <option value="basa">Basa dapat ditukar — AAS/Flamefotometer</option>
+            <option value="ktk">KTK — NH4OAc</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="raw-fields" id="raw-fields" style="margin-bottom:16px;"></div>
+
+    <div class="raw-upload-dashed-box" style="margin-bottom:20px;">
+      <div class="raw-upload-info">
+        <div class="raw-cloud-icon-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/></svg>
+        </div>
+        <div class="raw-upload-text">
+          <strong>Input data mentah</strong>
+          <p>Tempel data dari Excel, CSV, atau ketik langsung di form.</p>
+          <div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">ⓘ Format data mengikuti parameter yang dipilih.</div>
+        </div>
+      </div>
+      <div class="raw-upload-actions">
+        <button type="button" class="btn-outline" onclick="SOILS_UBATCH2.openPaste()"><span class="icon">📄</span> Tempel dari clipboard ›</button>
+        <button type="button" class="btn-outline" onclick="rawExportCSV()"><span class="icon">📊</span> Import Excel/CSV</button>
+      </div>
+      <div class="raw-drag-box">
+        <span style="font-size:20px;display:block;margin-bottom:2px;">⬆</span>
+        <strong style="font-size:12px;">Seret file di sini</strong>
+        <small style="display:block;font-size:11px;">(Excel, CSV)</small>
+      </div>
+    </div>
+
+    <div class="raw-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+      <button type="button" class="btn-gold-primary" onclick="rawCalculate()">⚡ Hitung Data Mentah</button>
+      <button type="button" class="btn-outline" onclick="rawSaveCurrent()">💾 Simpan ke Riwayat</button>
+      <button type="button" class="btn-outline" onclick="rawReset()">Reset</button>
+      <button type="button" class="btn-outline" onclick="rawExportCSV()">Export CSV</button>
+      <button type="button" class="btn-outline" onclick="rawClearHistory()">Hapus Riwayat</button>
+    </div>
+
+    <div class="raw-result" id="raw-result">
+      <div style="font-size:11px;font-weight:700;color:var(--accent-gold);margin-bottom:6px;">HASIL PERHITUNGAN</div>
+      <div class="raw-result-main" id="raw-result-value" style="font-size:24px;font-weight:700;color:var(--text-main);">—</div>
+      <div id="raw-result-detail"></div>
+      <div class="raw-formula" id="raw-result-formula" style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);margin-top:6px;"></div>
+      <div class="raw-status" id="raw-result-status"></div>
+    </div>
+
+    <div class="raw-history" style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-subtle);">
+      <div class="raw-history-head" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-main);">📋 Riwayat Data Mentah</h3>
+        <span id="raw-count" style="font-size:11px;color:var(--text-muted);">0 data</span>
+      </div>
+      <div class="raw-table-wrap ub2-table">
+        <table class="raw-table">
+          <thead><tr><th>Waktu</th><th>Sampel</th><th>Parameter</th><th>Data mentah</th><th>Hasil</th></tr></thead>
+          <tbody id="raw-history-body"></tbody>
+        </table>
+      </div>
+      <div class="raw-note" style="font-size:11.5px;color:var(--text-muted);margin-top:8px;">Riwayat disimpan lokal di browser (offline). Data ini tidak dikirim ke server.</div>
+    </div>
+  </div>
+</div>
+
+<div class="quick-nav" aria-label="Navigasi cepat">
+  <button type="button" onclick="spaGo('🧪 Kimia tanah')">🧪 Kimia</button>
+  <button type="button" onclick="spaGo('🪨 Fisika tanah')">🪨 Fisika</button>
+  <button type="button" onclick="spaGo('🦠 Biologi tanah')">🦠 Biologi</button>
+  <button type="button" onclick="spaGo('💧 Air & Irigasi')">💧 Air</button>
+  <button type="button" onclick="spaGo('🧫 Laboratorium')">🧫 Lab</button>
+  <button type="button" onclick="spaGo('📊 Statistik')">📊 Statistik</button>
+  <button type="button" onclick="spaGo('📚 Referensi')">📚 Referensi</button>
+</div>
+
+<div class="assistant-panel" id="spa-report-panel">
+  <div class="assistant-head">
+    <div><h2>📝 Ringkasan Laporan Praktikum</h2><p id="spa-report-subtitle">Hasil kalkulator yang sudah dijalankan pada halaman ini.</p></div>
+    <button type="button" onclick="document.getElementById('spa-report-panel').classList.remove('active')">Tutup</button>
+  </div>
+  <div id="spa-report-content"></div>
+</div>
+
+
+<!-- ===== Analisis Otomatis Sampel ===== -->
+
+<div class="auto-analysis" id="auto-analysis">
+<h2>🧠 Analisis Otomatis Sampel</h2>
+<p class="auto-help">Ringkas kondisi berdasarkan parameter dasar yang tersedia. Sistem hanya membaca nilai yang memang terisi pada field yang dikenali.</p>
+<div class="auto-actions"><button type="button" onclick="cleanAutoAnalyze()">🔍 Analisis Sampel</button><button type="button" onclick="cleanAutoClear()">Bersihkan hasil</button></div>
+<div class="auto-result" id="auto-result" hidden></div>
+</div>
+
+<!-- ===== End Analisis Otomatis Sampel ===== -->
+<div class="master-search-wrap">
+  <div class="master-search-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" id="master-search" placeholder="Cari kalkulator, referensi, atau istilah… (misal: KTK, salinitas, tekstur)" autocomplete="off">
+    <button type="button" class="master-search-clear" id="master-search-clear" aria-label="Bersihkan pencarian">&times;</button>
+  </div>
+  <p class="master-search-meta" id="master-search-meta"></p>
+</div>
+<div class="master-search-noresult" id="master-search-noresult">Tidak ada kalkulator atau referensi yang cocok dengan pencarian tersebut. Coba kata kunci lain, misal "pH", "hara", atau "irigasi".</div>
+
+<div class="group-label">Kimia tanah</div>
+
+<div class="section">
+  <h2>1. Kesuburan tanah dasar</h2>
+  <div class="grid">
+    <div><label>pH tanah</label><input type="number" step="0.1" id="ph" placeholder="misal 5.8"></div>
+    <div><label>C-organik (%)</label><input type="number" step="0.01" id="corg" placeholder="misal 2.1"></div>
+    <div><label>N-total (%)</label><input type="number" step="0.01" id="ntotal" placeholder="misal 0.18"></div>
+    <div><label>P-tersedia (ppm)</label><input type="number" step="0.1" id="pt" placeholder="misal 12.5"></div>
+    <div><label>K-tukar (me/100g)</label><input type="number" step="0.01" id="ktukar" placeholder="misal 0.35"></div>
+    <div><label>KTK (me/100g)</label><input type="number" step="0.1" id="ktk" placeholder="misal 18.4"></div>
+  </div>
+  <button onclick="hitungKimia()">Hitung kesuburan</button>
+  <div class="error" id="err-kimia"></div>
+  <div class="result" id="hasil-kimia">
+    <div class="result-grid">
+      <div class="result-card"><p>pH</p><p id="ph-out"></p></div>
+      <div class="result-card"><p>C-organik</p><p id="corg-out"></p></div>
+      <div class="result-card"><p>N-total</p><p id="ntotal-out"></p></div>
+      <div class="result-card"><p>P-tersedia</p><p id="pt-out"></p></div>
+      <div class="result-card"><p>K-tukar</p><p id="ktukar-out"></p></div>
+      <div class="result-card"><p>KTK</p><p id="ktk-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-kimia"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>2. Kejenuhan Basa (KB)</h2>
+  <p class="formula">KB (%) = (jumlah basa tukar / KTK) x 100</p>
+  <div class="grid">
+    <div><label>Jumlah basa tukar Ca+Mg+K+Na (me/100g)</label><input type="number" step="0.01" id="basa" placeholder="misal 8.5"></div>
+    <div><label>KTK (me/100g)</label><input type="number" step="0.1" id="ktk-kb" placeholder="misal 18.4"></div>
+  </div>
+  <button onclick="hitungKB()">Hitung KB</button>
+  <div class="error" id="err-kb"></div>
+  <div class="result" id="hasil-kb">
+    <div class="result-grid">
+      <div class="result-card"><p>Kejenuhan Basa</p><p id="kb-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="kb-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-kb"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>3. Rasio C/N</h2>
+  <p class="formula">C/N = %C-organik / %N-total</p>
+  <div class="grid">
+    <div><label>C-organik (%)</label><input type="number" step="0.01" id="corg-cn" placeholder="misal 2.1"></div>
+    <div><label>N-total (%)</label><input type="number" step="0.01" id="ntotal-cn" placeholder="misal 0.18"></div>
+  </div>
+  <button onclick="hitungCN()">Hitung rasio C/N</button>
+  <div class="error" id="err-cn"></div>
+  <div class="result" id="hasil-cn">
+    <div class="result-grid">
+      <div class="result-card"><p>Rasio C/N</p><p id="cn-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="cn-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-cn"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>4. Salinitas (DHL/EC)</h2>
+  <p class="formula">Klasifikasi langsung dari hasil pengukuran EC meter (dS/m)</p>
+  <div class="grid">
+    <div><label>Daya Hantar Listrik / DHL (dS/m)</label><input type="number" step="0.01" id="dhl" placeholder="misal 3.2"></div>
+  </div>
+  <button onclick="hitungDHL()">Klasifikasikan salinitas</button>
+  <div class="error" id="err-dhl"></div>
+  <div class="result" id="hasil-dhl">
+    <div class="result-card" style="margin-bottom:14px;"><p>Klasifikasi salinitas</p><p id="dhl-out"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-dhl"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>5. Kejenuhan Aluminium</h2>
+  <p class="formula">KA-Al (%) = Al-dd / (jumlah basa tukar + Al-dd) x 100</p>
+  <div class="grid">
+    <div><label>Al-dd (me/100g)</label><input type="number" step="0.01" id="aldd" placeholder="misal 2.1"></div>
+    <div><label>Jumlah basa tukar (me/100g)</label><input type="number" step="0.01" id="basa-al" placeholder="misal 8.5"></div>
+  </div>
+  <button onclick="hitungAl()">Hitung kejenuhan Al</button>
+  <div class="error" id="err-al"></div>
+  <div class="result" id="hasil-al">
+    <div class="result-grid">
+      <div class="result-card"><p>Kejenuhan Al</p><p id="al-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="al-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-al"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>6. Kebutuhan Kapur</h2>
+  <p class="formula">LR (me/100g) = 1,5 x Al-dd; Kapur (ton CaCO3/ha) = LR x BV x kedalaman x 0,05</p>
+  <div class="grid">
+    <div><label>Al-dd (me/100g)</label><input type="number" step="0.01" id="kapur-aldd" placeholder="misal 3.2"></div>
+    <div><label>Bobot volume tanah / BV (g/cm3)</label><input type="number" step="0.01" id="kapur-bv" placeholder="misal 1.2"></div>
+    <div><label>Kedalaman olah tanah (cm)</label><input type="number" step="1" id="kapur-kedalaman" placeholder="misal 20"></div>
+    <div><label>Kemurnian kapur pertanian (%)</label><input type="number" step="0.1" id="kapur-kemurnian" placeholder="misal 90"></div>
+  </div>
+  <button onclick="hitungKapur()">Hitung kebutuhan kapur</button>
+  <div class="error" id="err-kapur"></div>
+  <div class="result" id="hasil-kapur">
+    <div class="result-grid">
+      <div class="result-card"><p>Kebutuhan CaCO3 murni</p><p id="kapur-caco3-val"></p></div>
+      <div class="result-card"><p>Kebutuhan kapur pertanian</p><p id="kapur-aktual-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-kapur"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>7. Kebutuhan Dolomit</h2>
+  <p class="formula">LR (me/100g) = 1,5 x Al-dd; Dolomit (ton/ha) = (LR x BV x kedalaman x 0,05) / (kadar CaCO3 ekuivalen/100)</p>
+  <div class="grid">
+    <div><label>Al-dd (me/100g)</label><input type="number" step="0.01" id="dolomit-aldd" placeholder="misal 3.2"></div>
+    <div><label>Bobot volume tanah / BV (g/cm3)</label><input type="number" step="0.01" id="dolomit-bv" placeholder="misal 1.2"></div>
+    <div><label>Kedalaman olah tanah (cm)</label><input type="number" step="1" id="dolomit-kedalaman" placeholder="misal 20"></div>
+    <div><label>Kadar CaCO3 ekuivalen dolomit (%)</label><input type="number" step="0.1" id="dolomit-kemurnian" placeholder="misal 100"></div>
+  </div>
+  <button onclick="hitungDolomit()">Hitung kebutuhan dolomit</button>
+  <div class="error" id="err-dolomit"></div>
+  <div class="result" id="hasil-dolomit">
+    <div class="result-grid">
+      <div class="result-card"><p>Kebutuhan CaCO3 murni</p><p id="dolomit-caco3-val"></p></div>
+      <div class="result-card"><p>Kebutuhan dolomit</p><p id="dolomit-aktual-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-dolomit"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>8. Kebutuhan Pupuk N</h2>
+  <p class="formula">Pupuk (kg/ha) = Dosis anjuran N (kg/ha) / (kadar N pupuk (%) / 100)</p>
+  <div class="grid">
+    <div><label>Dosis anjuran N (kg N/ha)</label><input type="number" step="0.1" id="n-dosis" placeholder="misal 90"></div>
+    <div><label>Kadar N dalam pupuk (%)</label><input type="number" step="0.1" id="n-kadar" placeholder="misal 46 (Urea)"></div>
+    <div><label>Luas lahan (ha)</label><input type="number" step="0.01" id="n-luas" placeholder="misal 1"></div>
+  </div>
+  <button onclick="hitungPupukN()">Hitung kebutuhan pupuk N</button>
+  <div class="error" id="err-pupukn"></div>
+  <div class="result" id="hasil-pupukn">
+    <div class="result-grid">
+      <div class="result-card"><p>Kebutuhan pupuk</p><p id="pupukn-val"></p></div>
+      <div class="result-card"><p>Total untuk lahan</p><p id="pupukn-total-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-pupukn"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>9. Kebutuhan Pupuk P</h2>
+  <p class="formula">Pupuk (kg/ha) = Dosis anjuran P2O5 (kg/ha) / (kadar P2O5 pupuk (%) / 100)</p>
+  <div class="grid">
+    <div><label>Dosis anjuran P2O5 (kg/ha)</label><input type="number" step="0.1" id="p-dosis" placeholder="misal 45"></div>
+    <div><label>Kadar P2O5 dalam pupuk (%)</label><input type="number" step="0.1" id="p-kadar" placeholder="misal 36 (SP-36)"></div>
+    <div><label>Luas lahan (ha)</label><input type="number" step="0.01" id="p-luas" placeholder="misal 1"></div>
+  </div>
+  <button onclick="hitungPupukP()">Hitung kebutuhan pupuk P</button>
+  <div class="error" id="err-pupukp"></div>
+  <div class="result" id="hasil-pupukp">
+    <div class="result-grid">
+      <div class="result-card"><p>Kebutuhan pupuk</p><p id="pupukp-val"></p></div>
+      <div class="result-card"><p>Total untuk lahan</p><p id="pupukp-total-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-pupukp"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>10. Kebutuhan Pupuk K</h2>
+  <p class="formula">Pupuk (kg/ha) = Dosis anjuran K2O (kg/ha) / (kadar K2O pupuk (%) / 100)</p>
+  <div class="grid">
+    <div><label>Dosis anjuran K2O (kg/ha)</label><input type="number" step="0.1" id="k-dosis" placeholder="misal 60"></div>
+    <div><label>Kadar K2O dalam pupuk (%)</label><input type="number" step="0.1" id="k-kadar" placeholder="misal 60 (KCl)"></div>
+    <div><label>Luas lahan (ha)</label><input type="number" step="0.01" id="k-luas" placeholder="misal 1"></div>
+  </div>
+  <button onclick="hitungPupukK()">Hitung kebutuhan pupuk K</button>
+  <div class="error" id="err-pupukk"></div>
+  <div class="result" id="hasil-pupukk">
+    <div class="result-grid">
+      <div class="result-card"><p>Kebutuhan pupuk</p><p id="pupukk-val"></p></div>
+      <div class="result-card"><p>Total untuk lahan</p><p id="pupukk-total-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-pupukk"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>11. Kebutuhan Pupuk NPK (majemuk)</h2>
+  <p class="formula">Pupuk per unsur (kg/ha) = Dosis anjuran unsur / (kadar unsur dalam pupuk NPK / 100)</p>
+  <div class="grid">
+    <div><label>Dosis anjuran N (kg/ha)</label><input type="number" step="0.1" id="npk-dosisn" placeholder="misal 90"></div>
+    <div><label>Dosis anjuran P2O5 (kg/ha)</label><input type="number" step="0.1" id="npk-dosisp" placeholder="misal 45"></div>
+    <div><label>Dosis anjuran K2O (kg/ha)</label><input type="number" step="0.1" id="npk-dosisk" placeholder="misal 60"></div>
+    <div><label>Kadar N pupuk NPK (%)</label><input type="number" step="0.1" id="npk-kadarn" placeholder="misal 15"></div>
+    <div><label>Kadar P2O5 pupuk NPK (%)</label><input type="number" step="0.1" id="npk-kadarp" placeholder="misal 15"></div>
+    <div><label>Kadar K2O pupuk NPK (%)</label><input type="number" step="0.1" id="npk-kadark" placeholder="misal 15"></div>
+  </div>
+  <button onclick="hitungPupukNPK()">Hitung kebutuhan pupuk NPK</button>
+  <div class="error" id="err-pupuknpk"></div>
+  <div class="result" id="hasil-pupuknpk">
+    <div class="result-grid">
+      <div class="result-card"><p>Berdasarkan target N</p><p id="npk-n-val"></p></div>
+      <div class="result-card"><p>Berdasarkan target P2O5</p><p id="npk-p-val"></p></div>
+      <div class="result-card"><p>Berdasarkan target K2O</p><p id="npk-k-val"></p></div>
+      <div class="result-card"><p>Rekomendasi dosis NPK</p><p id="npk-rekomendasi-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-pupuknpk"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>12. Kejenuhan Ca</h2>
+  <p class="formula">Kejenuhan Ca (%) = (Ca-dd / KTK) x 100</p>
+  <div class="grid">
+    <div><label>Ca-dd (me/100g)</label><input type="number" step="0.01" id="ca-dd" placeholder="misal 6.5"></div>
+    <div><label>KTK (me/100g)</label><input type="number" step="0.1" id="ca-ktk" placeholder="misal 18.4"></div>
+  </div>
+  <button onclick="hitungKejenuhanCa()">Hitung kejenuhan Ca</button>
+  <div class="error" id="err-jca"></div>
+  <div class="result" id="hasil-jca">
+    <div class="result-grid">
+      <div class="result-card"><p>Kejenuhan Ca</p><p id="jca-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="jca-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-jca"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>13. Kejenuhan Mg</h2>
+  <p class="formula">Kejenuhan Mg (%) = (Mg-dd / KTK) x 100</p>
+  <div class="grid">
+    <div><label>Mg-dd (me/100g)</label><input type="number" step="0.01" id="mg-dd" placeholder="misal 1.8"></div>
+    <div><label>KTK (me/100g)</label><input type="number" step="0.1" id="mg-ktk" placeholder="misal 18.4"></div>
+  </div>
+  <button onclick="hitungKejenuhanMg()">Hitung kejenuhan Mg</button>
+  <div class="error" id="err-jmg"></div>
+  <div class="result" id="hasil-jmg">
+    <div class="result-grid">
+      <div class="result-card"><p>Kejenuhan Mg</p><p id="jmg-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="jmg-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-jmg"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>14. Kejenuhan K</h2>
+  <p class="formula">Kejenuhan K (%) = (K-dd / KTK) x 100</p>
+  <div class="grid">
+    <div><label>K-dd (me/100g)</label><input type="number" step="0.01" id="kj-dd" placeholder="misal 0.35"></div>
+    <div><label>KTK (me/100g)</label><input type="number" step="0.1" id="kj-ktk" placeholder="misal 18.4"></div>
+  </div>
+  <button onclick="hitungKejenuhanK()">Hitung kejenuhan K</button>
+  <div class="error" id="err-jk"></div>
+  <div class="result" id="hasil-jk">
+    <div class="result-grid">
+      <div class="result-card"><p>Kejenuhan K</p><p id="jk-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="jk-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-jk"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>15. Kejenuhan Na</h2>
+  <p class="formula">Kejenuhan Na (%) = (Na-dd / KTK) x 100</p>
+  <div class="grid">
+    <div><label>Na-dd (me/100g)</label><input type="number" step="0.01" id="na-dd" placeholder="misal 0.5"></div>
+    <div><label>KTK (me/100g)</label><input type="number" step="0.1" id="na-ktk" placeholder="misal 18.4"></div>
+  </div>
+  <button onclick="hitungKejenuhanNa()">Hitung kejenuhan Na</button>
+  <div class="error" id="err-jna"></div>
+  <div class="result" id="hasil-jna">
+    <div class="result-grid">
+      <div class="result-card"><p>Kejenuhan Na</p><p id="jna-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="jna-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-jna"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>16. ESP (Exchangeable Sodium Percentage)</h2>
+  <p class="formula">ESP (%) = (Na-dd / KTK) x 100; tanah tergolong sodik bila ESP >= 15%</p>
+  <div class="grid">
+    <div><label>Na-dd (me/100g)</label><input type="number" step="0.01" id="esp-na" placeholder="misal 0.5"></div>
+    <div><label>KTK (me/100g)</label><input type="number" step="0.1" id="esp-ktk" placeholder="misal 18.4"></div>
+  </div>
+  <button onclick="hitungESP()">Hitung ESP</button>
+  <div class="error" id="err-esp"></div>
+  <div class="result" id="hasil-esp">
+    <div class="result-grid">
+      <div class="result-card"><p>ESP</p><p id="esp-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="esp-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-esp"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>17. SAR (Sodium Adsorption Ratio)</h2>
+  <p class="formula">SAR = Na / akar((Ca+Mg)/2), dengan Na, Ca, Mg dalam me/L larutan ekstrak jenuh/air irigasi (bukan me/100g tanah)</p>
+  <div class="grid">
+    <div><label>Na dalam ekstrak (me/L)</label><input type="number" step="0.01" id="sar-na" placeholder="misal 8"></div>
+    <div><label>Ca dalam ekstrak (me/L)</label><input type="number" step="0.01" id="sar-ca" placeholder="misal 4"></div>
+    <div><label>Mg dalam ekstrak (me/L)</label><input type="number" step="0.01" id="sar-mg" placeholder="misal 2"></div>
+  </div>
+  <button onclick="hitungSAR()">Hitung SAR</button>
+  <div class="error" id="err-sar"></div>
+  <div class="result" id="hasil-sar">
+    <div class="result-grid">
+      <div class="result-card"><p>SAR</p><p id="sar-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="sar-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-sar"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>18. Konversi Unsur Hara</h2>
+  <p class="formula">Konversi antar bentuk unsur dan oksida menggunakan faktor konversi berat molekul standar</p>
+  <div class="grid">
+    <div>
+      <label>Jenis konversi</label>
+      <select id="konversi-jenis">
+        <option value="p-p2o5">P &rarr; P2O5 (x 2,2914)</option>
+        <option value="p2o5-p">P2O5 &rarr; P (x 0,4364)</option>
+        <option value="k-k2o">K &rarr; K2O (x 1,2046)</option>
+        <option value="k2o-k">K2O &rarr; K (x 0,8301)</option>
+        <option value="ca-cao">Ca &rarr; CaO (x 1,3992)</option>
+        <option value="cao-ca">CaO &rarr; Ca (x 0,7147)</option>
+        <option value="mg-mgo">Mg &rarr; MgO (x 1,6579)</option>
+        <option value="mgo-mg">MgO &rarr; Mg (x 0,6030)</option>
+        <option value="n-protein">N &rarr; Protein kasar (x 6,25)</option>
+        <option value="protein-n">Protein kasar &rarr; N (x 0,16)</option>
+      </select>
+    </div>
+    <div><label>Nilai yang mau dikonversi</label><input type="number" step="any" id="konversi-nilai" placeholder="misal 20"></div>
+  </div>
+  <button onclick="hitungKonversi()">Konversi</button>
+  <div class="error" id="err-konversi"></div>
+  <div class="result" id="hasil-konversi">
+    <div class="result-card" style="margin-bottom:14px;"><p>Hasil konversi</p><p id="konversi-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-konversi"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>19. Klasifikasi/Status Unsur Hara</h2>
+  <p class="formula">Cek cepat status satu parameter tanpa harus isi form kesuburan lengkap</p>
+  <div class="grid">
+    <div>
+      <label>Parameter</label>
+      <select id="klasifikasi-jenis">
+        <option value="ph">pH tanah</option>
+        <option value="corg">C-organik (%)</option>
+        <option value="ntotal">N-total (%)</option>
+        <option value="p">P-tersedia (ppm)</option>
+        <option value="k">K-tukar (me/100g)</option>
+        <option value="ktk">KTK (me/100g)</option>
+        <option value="kb">Kejenuhan Basa (%)</option>
+        <option value="cn">Rasio C/N</option>
+        <option value="al">Kejenuhan Al (%)</option>
+        <option value="jca">Kejenuhan Ca (%)</option>
+        <option value="jmg">Kejenuhan Mg (%)</option>
+        <option value="jk">Kejenuhan K (%)</option>
+        <option value="jna">Kejenuhan Na (%)</option>
+        <option value="esp">ESP (%)</option>
+        <option value="sar">SAR</option>
+        <option value="dhl">DHL/EC (dS/m)</option>
+      </select>
+    </div>
+    <div><label>Nilai hasil analisis</label><input type="number" step="any" id="klasifikasi-nilai" placeholder="misal 5.8"></div>
+  </div>
+  <button onclick="hitungKlasifikasi()">Cek status</button>
+  <div class="error" id="err-klasifikasi"></div>
+  <div class="result" id="hasil-klasifikasi">
+    <div class="result-card" style="margin-bottom:14px;"><p>Status</p><p id="klasifikasi-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-klasifikasi"></p></div>
+  </div>
+</div>
+
+<div class="group-label">Fisika tanah</div>
+
+<div class="section">
+  <h2>20. Porositas Tanah (metode ring sampel)</h2>
+  <p class="formula">BD = m / V; TRP = 1 - (BD / PD)</p>
+  <div class="grid">
+    <div><label>Massa tanah kering (g)</label><input type="number" step="0.01" id="poros-berat" placeholder="misal 120"></div>
+    <div><label>Volume ring / sampel (cm3)</label><input type="number" step="0.01" id="poros-volume" placeholder="misal 100"></div>
+    <div>
+      <label>Metode Berat Jenis Partikel (PD)</label>
+      <div style="display:flex; gap:12px; margin-top:8px;">
+        <label><input type="radio" name="poros-pd-mode" value="asumsi" checked onclick="document.getElementById('poros-pd-terukur-wrap').style.display='none'"> Asumsi 2,65 g/cm³</label>
+        <label><input type="radio" name="poros-pd-mode" value="terukur" onclick="document.getElementById('poros-pd-terukur-wrap').style.display='block'"> Terukur</label>
+      </div>
+    </div>
+  </div>
+  <div id="poros-pd-terukur-wrap" style="display:none; margin-bottom:12px; padding:10px; background:rgba(0,0,0,0.02); border-radius:6px;">
+    <div class="grid" style="margin-bottom:0;">
+      <div><label>Massa padatan kering (g)</label><input type="number" step="0.01" id="poros-pd-massa" placeholder="misal 50"></div>
+      <div><label>Volume padatan (cm3)</label><input type="number" step="0.01" id="poros-pd-vol" placeholder="misal 18.87"></div>
+    </div>
+  </div>
+  <button onclick="hitungPorositas()">Hitung BD, PD, &amp; TRP</button>
+  <div class="error" id="err-poros"></div>
+  <div class="result" id="hasil-poros">
+    <div class="result-grid">
+      <div class="result-card"><p>Berat Isi (BD)</p><p id="poros-bv-val"></p></div>
+      <div class="result-card"><p>Berat Jenis (PD)</p><p id="poros-pd-val"></p></div>
+      <div class="result-card"><p>TRP (fraksi)</p><p id="poros-val-frac"></p></div>
+      <div class="result-card"><p>TRP (%)</p><p id="poros-val-pct"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-poros"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>21. BV, BJ, dan TRP</h2>
+  <p class="formula">TRP = 1 - (BD / PD)</p>
+  <div class="grid">
+    <div><label>Berat Isi / BD (g/cm3)</label><input type="number" step="0.01" id="bv" placeholder="misal 1.20"></div>
+    <div>
+      <label>Metode Berat Jenis Partikel (PD)</label>
+      <div style="display:flex; gap:12px; margin-top:8px;">
+        <label><input type="radio" name="fisika-pd-mode" value="asumsi" checked onclick="document.getElementById('fisika-pd-terukur-wrap').style.display='none'"> Asumsi 2,65 g/cm³</label>
+        <label><input type="radio" name="fisika-pd-mode" value="terukur" onclick="document.getElementById('fisika-pd-terukur-wrap').style.display='block'"> Terukur</label>
+      </div>
+    </div>
+  </div>
+  <div id="fisika-pd-terukur-wrap" style="display:none; margin-bottom:12px; padding:10px; background:rgba(0,0,0,0.02); border-radius:6px;">
+    <div class="grid" style="margin-bottom:0;">
+      <div><label>Massa padatan kering (g)</label><input type="number" step="0.01" id="fisika-pd-massa" placeholder="misal 50"></div>
+      <div><label>Volume padatan (cm3)</label><input type="number" step="0.01" id="fisika-pd-vol" placeholder="misal 18.87"></div>
+    </div>
+  </div>
+  <button onclick="hitungFisika()">Hitung TRP</button>
+  <div class="error" id="err-fisika"></div>
+  <div class="result" id="hasil-fisika">
+    <div class="result-grid">
+      <div class="result-card"><p>Berat Jenis (PD)</p><p id="fisika-pd-val"></p></div>
+      <div class="result-card"><p>TRP (fraksi)</p><p id="trp-val-frac"></p></div>
+      <div class="result-card"><p>TRP (%)</p><p id="trp-val-pct"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-fisika"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>22. Tekstur tanah (segitiga USDA)</h2>
+  <div class="grid">
+    <div><label>Pasir (%)</label><input type="number" step="0.1" id="pasir" placeholder="misal 40"></div>
+    <div><label>Debu (%)</label><input type="number" step="0.1" id="debu" placeholder="misal 40"></div>
+    <div><label>Liat (%)</label><input type="number" step="0.1" id="liat" placeholder="misal 20"></div>
+  </div>
+  <button onclick="hitungTekstur()">Tentukan kelas tekstur</button>
+  <div class="error" id="err-tekstur"></div>
+  <div class="result" id="hasil-tekstur">
+    <div class="result-card" style="margin-bottom:14px;"><p>Kelas tekstur</p><p id="tekstur-out"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-tekstur"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>23. Distribusi Ukuran Partikel (dari berat fraksi)</h2>
+  <p class="formula">% fraksi = (berat fraksi / berat total contoh) x 100</p>
+  <div class="grid">
+    <div><label>Berat total contoh tanah kering (g)</label><input type="number" step="0.01" id="dup-total" placeholder="misal 50"></div>
+    <div><label>Berat fraksi pasir (g)</label><input type="number" step="0.01" id="dup-pasir" placeholder="misal 20"></div>
+    <div><label>Berat fraksi debu (g)</label><input type="number" step="0.01" id="dup-debu" placeholder="misal 20"></div>
+    <div><label>Berat fraksi liat (g)</label><input type="number" step="0.01" id="dup-liat" placeholder="misal 10"></div>
+  </div>
+  <button onclick="hitungDistribusiPartikel()">Hitung distribusi ukuran partikel</button>
+  <div class="error" id="err-dup"></div>
+  <div class="result" id="hasil-dup">
+    <div class="result-grid">
+      <div class="result-card"><p>% Pasir</p><p id="dup-pasir-val"></p></div>
+      <div class="result-card"><p>% Debu</p><p id="dup-debu-val"></p></div>
+      <div class="result-card"><p>% Liat</p><p id="dup-liat-val"></p></div>
+      <div class="result-card"><p>Kelas tekstur</p><p id="dup-tekstur-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-dup"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>24. Kadar air tanah</h2>
+  <p class="formula">KA (%) = (berat basah - berat kering) / berat kering x 100</p>
+  <div class="grid">
+    <div><label>Berat tanah basah (g)</label><input type="number" step="0.01" id="beratbasah" placeholder="misal 25.4"></div>
+    <div><label>Berat tanah kering oven (g)</label><input type="number" step="0.01" id="beratkering" placeholder="misal 21.8"></div>
+  </div>
+  <button onclick="hitungKA()">Hitung kadar air</button>
+  <div class="error" id="err-ka"></div>
+  <div class="result" id="hasil-ka">
+    <div class="result-card" style="margin-bottom:14px;"><p>Kadar air</p><p id="ka-out"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-ka"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>25. Kadar Air Volumetrik</h2>
+  <p class="formula">Kadar air volumetrik (%) = Kadar air gravimetrik (%) x BV (g/cm3), dengan asumsi densitas air = 1 g/cm3</p>
+  <div class="grid">
+    <div><label>Kadar air gravimetrik / KA (%)</label><input type="number" step="0.1" id="kav-grav" placeholder="misal 22"></div>
+    <div><label>Bobot volume tanah / BV (g/cm3)</label><input type="number" step="0.01" id="kav-bv" placeholder="misal 1.2"></div>
+  </div>
+  <button onclick="hitungKadarAirVolumetrik()">Hitung kadar air volumetrik</button>
+  <div class="error" id="err-kav"></div>
+  <div class="result" id="hasil-kav">
+    <div class="result-card" style="margin-bottom:14px;"><p>Kadar air volumetrik</p><p id="kav-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-kav"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>26. Water Filled Pore Space (WFPS)</h2>
+  <p class="formula">WFPS (%) = (Kadar air volumetrik / Porositas total) x 100</p>
+  <div class="grid">
+    <div><label>Kadar air volumetrik (%)</label><input type="number" step="0.1" id="wfps-kav" placeholder="misal 26.4"></div>
+    <div><label>Porositas total (%)</label><input type="number" step="0.1" id="wfps-poros" placeholder="misal 54"></div>
+  </div>
+  <button onclick="hitungWFPS()">Hitung WFPS</button>
+  <div class="error" id="err-wfps"></div>
+  <div class="result" id="hasil-wfps">
+    <div class="result-grid">
+      <div class="result-card"><p>WFPS</p><p id="wfps-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="wfps-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-wfps"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>27. Permeabilitas tanah</h2>
+  <div class="grid">
+    <div><label>Laju infiltrasi (cm/jam)</label><input type="number" step="0.01" id="permea" placeholder="misal 4.5"></div>
+  </div>
+  <button onclick="hitungPermea()">Klasifikasikan</button>
+  <div class="error" id="err-permea"></div>
+  <div class="result" id="hasil-permea">
+    <div class="result-card" style="margin-bottom:14px;"><p>Klasifikasi permeabilitas</p><p id="permea-out"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-permea"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>28. Infiltrasi Kumulatif</h2>
+  <p class="formula">Infiltrasi kumulatif (cm) = volume air meresap / luas ring; Laju rata-rata (cm/jam) = kumulatif / waktu (jam)</p>
+  <div class="grid">
+    <div><label>Volume air meresap (ml)</label><input type="number" step="0.1" id="infil-volume" placeholder="misal 785"></div>
+    <div><label>Luas permukaan ring infiltrometer (cm2)</label><input type="number" step="0.1" id="infil-luas" placeholder="misal 176.6"></div>
+    <div><label>Waktu pengukuran (menit)</label><input type="number" step="0.1" id="infil-waktu" placeholder="misal 30"></div>
+  </div>
+  <button onclick="hitungInfiltrasiKumulatif()">Hitung infiltrasi kumulatif</button>
+  <div class="error" id="err-infil"></div>
+  <div class="result" id="hasil-infil">
+    <div class="result-grid">
+      <div class="result-card"><p>Infiltrasi kumulatif</p><p id="infil-kumulatif-val"></p></div>
+      <div class="result-card"><p>Laju infiltrasi rata-rata</p><p id="infil-laju-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="infil-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-infil"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>29. Konduktivitas Hidraulik Jenuh (Ks)</h2>
+  <p class="formula">Ks (cm/jam) = (Q x L) / (A x H x t) — metode constant head (Hukum Darcy)</p>
+  <div class="grid">
+    <div><label>Volume air yang mengalir / Q (cm3 atau ml)</label><input type="number" step="0.1" id="ks-q" placeholder="misal 250"></div>
+    <div><label>Panjang sampel tanah / L (cm)</label><input type="number" step="0.1" id="ks-l" placeholder="misal 5"></div>
+    <div><label>Luas penampang sampel / A (cm2)</label><input type="number" step="0.1" id="ks-a" placeholder="misal 78.5"></div>
+    <div><label>Tinggi tekanan hidrolik / H (cm)</label><input type="number" step="0.1" id="ks-h" placeholder="misal 10"></div>
+    <div><label>Waktu pengukuran (jam)</label><input type="number" step="0.01" id="ks-t" placeholder="misal 1"></div>
+  </div>
+  <button onclick="hitungKs()">Hitung Ks</button>
+  <div class="error" id="err-ks"></div>
+  <div class="result" id="hasil-ks">
+    <div class="result-grid">
+      <div class="result-card"><p>Ks</p><p id="ks-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="ks-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-ks"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>30. Air Tersedia (KL - TLP)</h2>
+  <p class="formula">Air Tersedia (%) = Kapasitas Lapang - Titik Layu Permanen</p>
+  <div class="grid">
+    <div><label>Kapasitas Lapang / KL (%)</label><input type="number" step="0.1" id="kl" placeholder="misal 32"></div>
+    <div><label>Titik Layu Permanen / TLP (%)</label><input type="number" step="0.1" id="tlp" placeholder="misal 15"></div>
+  </div>
+  <button onclick="hitungAT()">Hitung air tersedia</button>
+  <div class="error" id="err-at"></div>
+  <div class="result" id="hasil-at">
+    <div class="result-grid">
+      <div class="result-card"><p>Air tersedia</p><p id="at-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="at-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-at"></p></div>
+  </div>
+</div>
+
+<div class="group-label">Biologi tanah</div>
+
+<div class="section">
+  <h2>31. Populasi Mikroba (Total Plate Count)</h2>
+  <p class="formula">N (CFU/g) = jumlah koloni / (volume tanam x faktor pengenceran)</p>
+  <div class="grid">
+    <div><label>Jumlah koloni terhitung</label><input type="number" step="1" id="koloni" placeholder="misal 45"></div>
+    <div><label>Volume yang ditanam (ml)</label><input type="number" step="0.01" id="volume-tanam" placeholder="misal 0.1"></div>
+    <div><label>Faktor pengenceran (misal 10^-5 isi 0.00001)</label><input type="number" step="any" id="pengenceran" placeholder="misal 0.00001"></div>
+  </div>
+  <button onclick="hitungTPC()">Hitung populasi mikroba</button>
+  <div class="error" id="err-tpc"></div>
+  <div class="result" id="hasil-tpc">
+    <div class="result-card" style="margin-bottom:14px;"><p>Populasi mikroba</p><p id="tpc-out"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-tpc"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>32. TPC per Kelompok Mikroba</h2>
+  <p class="formula">N (CFU/g) = jumlah koloni / (volume tanam x faktor pengenceran), dihitung untuk tiap kelompok</p>
+  <div class="grid">
+    <div><label>Jumlah koloni — Bakteri</label><input type="number" step="1" id="tpck-bakteri-koloni" placeholder="misal 120"></div>
+    <div><label>Volume tanam (ml) — Bakteri</label><input type="number" step="0.01" id="tpck-bakteri-volume" placeholder="misal 0.1"></div>
+    <div><label>Faktor pengenceran — Bakteri</label><input type="number" step="any" id="tpck-bakteri-pengenceran" placeholder="misal 0.00001"></div>
+    <div><label>Media (opsional) — Bakteri</label><input type="text" id="tpck-bakteri-media" placeholder="misal Nutrient Agar"></div>
+    <div><label>Jumlah koloni — Jamur</label><input type="number" step="1" id="tpck-jamur-koloni" placeholder="misal 15"></div>
+    <div><label>Volume tanam (ml) — Jamur</label><input type="number" step="0.01" id="tpck-jamur-volume" placeholder="misal 0.1"></div>
+    <div><label>Faktor pengenceran — Jamur</label><input type="number" step="any" id="tpck-jamur-pengenceran" placeholder="misal 0.001"></div>
+    <div><label>Media (opsional) — Jamur</label><input type="text" id="tpck-jamur-media" placeholder="misal PDA"></div>
+    <div><label>Jumlah koloni — Aktinomicetes</label><input type="number" step="1" id="tpck-aktino-koloni" placeholder="misal 30"></div>
+    <div><label>Volume tanam (ml) — Aktinomicetes</label><input type="number" step="0.01" id="tpck-aktino-volume" placeholder="misal 0.1"></div>
+    <div><label>Faktor pengenceran — Aktinomicetes</label><input type="number" step="any" id="tpck-aktino-pengenceran" placeholder="misal 0.0001"></div>
+    <div><label>Media (opsional) — Aktinomicetes</label><input type="text" id="tpck-aktino-media" placeholder="misal Kenknight Agar"></div>
+  </div>
+  <button onclick="hitungTPCKelompok()">Hitung TPC per kelompok</button>
+  <div class="error" id="err-tpck"></div>
+  <div class="result" id="hasil-tpck">
+    <div class="result-grid">
+      <div class="result-card"><p>Bakteri</p><p id="tpck-bakteri-val"></p></div>
+      <div class="result-card"><p>Jamur</p><p id="tpck-jamur-val"></p></div>
+      <div class="result-card"><p>Aktinomicetes</p><p id="tpck-aktino-val"></p></div>
+      <div class="result-card"><p>Rasio Bakteri : Jamur</p><p id="tpck-rasio-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-tpck"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>33. Indeks Keragaman Mikroba Sederhana</h2>
+  <p class="formula">H' = -Sigma(pi x ln pi), dengan pi = ni/N; Evenness (J) = H' / ln(S)</p>
+  <div class="grid">
+    <div><label>Jumlah koloni jenis 1</label><input type="number" step="1" id="keragaman-jenis1" placeholder="misal 12"></div>
+    <div><label>Jumlah koloni jenis 2</label><input type="number" step="1" id="keragaman-jenis2" placeholder="misal 8"></div>
+    <div><label>Jumlah koloni jenis 3</label><input type="number" step="1" id="keragaman-jenis3" placeholder="misal 5"></div>
+    <div><label>Jumlah koloni jenis 4</label><input type="number" step="1" id="keragaman-jenis4" placeholder="opsional"></div>
+    <div><label>Jumlah koloni jenis 5</label><input type="number" step="1" id="keragaman-jenis5" placeholder="opsional"></div>
+    <div><label>Jumlah koloni jenis 6</label><input type="number" step="1" id="keragaman-jenis6" placeholder="opsional"></div>
+    <div><label>Jumlah koloni jenis 7</label><input type="number" step="1" id="keragaman-jenis7" placeholder="opsional"></div>
+    <div><label>Jumlah koloni jenis 8</label><input type="number" step="1" id="keragaman-jenis8" placeholder="opsional"></div>
+  </div>
+  <button onclick="hitungKeragaman()">Hitung indeks keragaman</button>
+  <div class="error" id="err-keragaman"></div>
+  <div class="result" id="hasil-keragaman">
+    <div class="result-grid">
+      <div class="result-card"><p>Richness (S)</p><p id="keragaman-s-val"></p></div>
+      <div class="result-card"><p>Indeks Shannon (H')</p><p id="keragaman-h-val"></p></div>
+      <div class="result-card"><p>Evenness (J)</p><p id="keragaman-j-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="keragaman-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-keragaman"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>34. Status Kesuburan Biologi berdasarkan TPC</h2>
+  <p class="formula">Klasifikasi TPC (CFU/g) terhadap ambang batas indikatif per kelompok mikroba</p>
+  <div class="grid">
+    <div>
+      <label>Kelompok mikroba</label>
+      <select id="statusbio-kelompok">
+        <option value="bakteri">Bakteri</option>
+        <option value="jamur">Jamur</option>
+        <option value="aktinomicetes">Aktinomicetes</option>
+      </select>
+    </div>
+    <div><label>TPC total (CFU/g)</label><input type="number" step="any" id="statusbio-tpc" placeholder="misal 2500000"></div>
+  </div>
+  <button onclick="hitungStatusBiologi()">Cek status kesuburan biologi</button>
+  <div class="error" id="err-statusbio"></div>
+  <div class="result" id="hasil-statusbio">
+    <div class="result-card" style="margin-bottom:14px;"><p>Status</p><p id="statusbio-out"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-statusbio"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>35. Respirasi Tanah (evolusi CO2)</h2>
+  <p class="formula">CO2 (mg) = (Vb - Vs) x N HCl x 22; Fluks = CO2 / (berat tanah x waktu inkubasi)</p>
+  <div class="grid">
+    <div><label>Volume titran blanko / Vb (ml)</label><input type="number" step="0.01" id="vb" placeholder="misal 20"></div>
+    <div><label>Volume titran sampel / Vs (ml)</label><input type="number" step="0.01" id="vs" placeholder="misal 15"></div>
+    <div><label>Normalitas HCl (N)</label><input type="number" step="0.001" id="nhcl" placeholder="misal 0.1"></div>
+    <div><label>Berat tanah (kg)</label><input type="number" step="0.001" id="beratrespirasi" placeholder="misal 0.5"></div>
+    <div><label>Waktu inkubasi (hari)</label><input type="number" step="0.1" id="waktuinkubasi" placeholder="misal 7"></div>
+  </div>
+  <button onclick="hitungRespirasi()">Hitung respirasi tanah</button>
+  <div class="error" id="err-respirasi"></div>
+  <div class="result" id="hasil-respirasi">
+    <div class="result-grid">
+      <div class="result-card"><p>CO2 dihasilkan</p><p id="co2-val"></p></div>
+      <div class="result-card"><p>Fluks respirasi</p><p id="fluks-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-respirasi"></p></div>
+  </div>
+</div>
+
+
+<div class="section">
+  <h2>36. Populasi Bakteri</h2>
+  <p class="formula">N (CFU/g) = jumlah koloni / (volume tanam x faktor pengenceran)</p>
+  <div class="grid">
+    <div><label>Jumlah koloni terhitung</label><input type="number" step="1" id="popbak-koloni" placeholder="misal 85"></div>
+    <div><label>Volume yang ditanam (ml)</label><input type="number" step="0.01" id="popbak-volume" placeholder="misal 0.1"></div>
+    <div><label>Faktor pengenceran (misal 10^-6 isi 0.000001)</label><input type="number" step="any" id="popbak-pengenceran" placeholder="misal 0.000001"></div>
+  </div>
+  <button onclick="hitungPopBakteri()">Hitung populasi bakteri</button>
+  <div class="error" id="err-popbak"></div>
+  <div class="result" id="hasil-popbak">
+    <div class="result-grid">
+      <div class="result-card"><p>Populasi bakteri</p><p id="popbak-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="popbak-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-popbak"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>37. Populasi Jamur</h2>
+  <p class="formula">N (CFU/g) = jumlah koloni / (volume tanam x faktor pengenceran)</p>
+  <div class="grid">
+    <div><label>Jumlah koloni terhitung</label><input type="number" step="1" id="popjam-koloni" placeholder="misal 22"></div>
+    <div><label>Volume yang ditanam (ml)</label><input type="number" step="0.01" id="popjam-volume" placeholder="misal 0.1"></div>
+    <div><label>Faktor pengenceran (misal 10^-3 isi 0.001)</label><input type="number" step="any" id="popjam-pengenceran" placeholder="misal 0.001"></div>
+  </div>
+  <button onclick="hitungPopJamur()">Hitung populasi jamur</button>
+  <div class="error" id="err-popjam"></div>
+  <div class="result" id="hasil-popjam">
+    <div class="result-grid">
+      <div class="result-card"><p>Populasi jamur</p><p id="popjam-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="popjam-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-popjam"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>38. Biomassa Mikroba-C (metode fumigasi-ekstraksi kloroform)</h2>
+  <p class="formula">C-mik (mg C/kg tanah) = (C-organik terekstrak fumigasi - C-organik terekstrak non-fumigasi) / kEC</p>
+  <div class="grid">
+    <div><label>C-organik ekstrak tanah difumigasi (mg C/kg)</label><input type="number" step="0.01" id="bmc-fum" placeholder="misal 420"></div>
+    <div><label>C-organik ekstrak tanah non-fumigasi (mg C/kg)</label><input type="number" step="0.01" id="bmc-nonfum" placeholder="misal 240"></div>
+    <div><label>Faktor koreksi kEC (default 0.45)</label><input type="number" step="0.01" id="bmc-kec" placeholder="0.45" value="0.45"></div>
+  </div>
+  <button onclick="hitungBMC()">Hitung biomassa mikroba-C</button>
+  <div class="error" id="err-bmc"></div>
+  <div class="result" id="hasil-bmc">
+    <div class="result-grid">
+      <div class="result-card"><p>Biomassa mikroba-C</p><p id="bmc-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="bmc-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-bmc"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>39. Biomassa Mikroba-N (metode fumigasi-ekstraksi kloroform)</h2>
+  <p class="formula">N-mik (mg N/kg tanah) = (N terekstrak fumigasi - N terekstrak non-fumigasi) / kEN</p>
+  <div class="grid">
+    <div><label>N ekstrak tanah difumigasi (mg N/kg)</label><input type="number" step="0.01" id="bmn-fum" placeholder="misal 55"></div>
+    <div><label>N ekstrak tanah non-fumigasi (mg N/kg)</label><input type="number" step="0.01" id="bmn-nonfum" placeholder="misal 30"></div>
+    <div><label>Faktor koreksi kEN (default 0.54)</label><input type="number" step="0.01" id="bmn-ken" placeholder="0.54" value="0.54"></div>
+  </div>
+  <button onclick="hitungBMN()">Hitung biomassa mikroba-N</button>
+  <div class="error" id="err-bmn"></div>
+  <div class="result" id="hasil-bmn">
+    <div class="result-grid">
+      <div class="result-card"><p>Biomassa mikroba-N</p><p id="bmn-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="bmn-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-bmn"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>40. Mineralisasi Nitrogen (net N mineralization)</h2>
+  <p class="formula">N-min = (NH4+NO3)akhir - (NH4+NO3)awal; Laju = N-min / waktu inkubasi</p>
+  <div class="grid">
+    <div><label>NH4-N awal (mg N/kg)</label><input type="number" step="0.01" id="nmin-nh4awal" placeholder="misal 8"></div>
+    <div><label>NO3-N awal (mg N/kg)</label><input type="number" step="0.01" id="nmin-no3awal" placeholder="misal 5"></div>
+    <div><label>NH4-N akhir (mg N/kg)</label><input type="number" step="0.01" id="nmin-nh4akhir" placeholder="misal 6"></div>
+    <div><label>NO3-N akhir (mg N/kg)</label><input type="number" step="0.01" id="nmin-no3akhir" placeholder="misal 14"></div>
+    <div><label>Waktu inkubasi (hari)</label><input type="number" step="0.1" id="nmin-waktu" placeholder="misal 14"></div>
+  </div>
+  <button onclick="hitungNmin()">Hitung mineralisasi N</button>
+  <div class="error" id="err-nmin"></div>
+  <div class="result" id="hasil-nmin">
+    <div class="result-grid">
+      <div class="result-card"><p>N mineral bersih</p><p id="nmin-total-val"></p></div>
+      <div class="result-card"><p>Laju mineralisasi</p><p id="nmin-laju-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="nmin-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-nmin"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>41. Nitrifikasi</h2>
+  <p class="formula">Laju nitrifikasi = (NO3 akhir - NO3 awal) / waktu; % Nitrifikasi = NO3 akhir / (NH4 akhir + NO3 akhir) x 100</p>
+  <div class="grid">
+    <div><label>NO3-N awal (mg N/kg)</label><input type="number" step="0.01" id="nitrif-no3awal" placeholder="misal 5"></div>
+    <div><label>NO3-N akhir (mg N/kg)</label><input type="number" step="0.01" id="nitrif-no3akhir" placeholder="misal 14"></div>
+    <div><label>NH4-N akhir (mg N/kg)</label><input type="number" step="0.01" id="nitrif-nh4akhir" placeholder="misal 6"></div>
+    <div><label>Waktu inkubasi (hari)</label><input type="number" step="0.1" id="nitrif-waktu" placeholder="misal 14"></div>
+  </div>
+  <button onclick="hitungNitrifikasi()">Hitung nitrifikasi</button>
+  <div class="error" id="err-nitrif"></div>
+  <div class="result" id="hasil-nitrif">
+    <div class="result-grid">
+      <div class="result-card"><p>Laju nitrifikasi</p><p id="nitrif-laju-val"></p></div>
+      <div class="result-card"><p>% Nitrifikasi</p><p id="nitrif-persen-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="nitrif-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-nitrif"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>42. Aktivitas Enzim Dehidrogenase</h2>
+  <p class="formula">Aktivitas (µg TPF/g tanah/24 jam) = (Konsentrasi TPF dari kurva standar x Volume ekstrak) / Berat tanah</p>
+  <div class="grid">
+    <div><label>Konsentrasi TPF dari kurva standar (µg/ml)</label><input type="number" step="0.01" id="dha-konsentrasi" placeholder="misal 12.5"></div>
+    <div><label>Volume total ekstrak/aseton (ml)</label><input type="number" step="0.1" id="dha-volume" placeholder="misal 25"></div>
+    <div><label>Berat tanah (g)</label><input type="number" step="0.01" id="dha-berat" placeholder="misal 6"></div>
+  </div>
+  <button onclick="hitungDHA()">Hitung aktivitas dehidrogenase</button>
+  <div class="error" id="err-dha"></div>
+  <div class="result" id="hasil-dha">
+    <div class="result-grid">
+      <div class="result-card"><p>Aktivitas dehidrogenase</p><p id="dha-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="dha-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-dha"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>43. Aktivitas Enzim Urease</h2>
+  <p class="formula">Aktivitas (µg N-NH4/g tanah/jam) = (Konsentrasi NH4 x Volume ekstrak) / (Berat tanah x waktu inkubasi)</p>
+  <div class="grid">
+    <div><label>Konsentrasi NH4 dari kurva standar (µg/ml)</label><input type="number" step="0.01" id="urease-konsentrasi" placeholder="misal 18"></div>
+    <div><label>Volume ekstrak (ml)</label><input type="number" step="0.1" id="urease-volume" placeholder="misal 50"></div>
+    <div><label>Berat tanah (g)</label><input type="number" step="0.01" id="urease-berat" placeholder="misal 5"></div>
+    <div><label>Waktu inkubasi (jam)</label><input type="number" step="0.1" id="urease-waktu" placeholder="misal 2"></div>
+  </div>
+  <button onclick="hitungUrease()">Hitung aktivitas urease</button>
+  <div class="error" id="err-urease"></div>
+  <div class="result" id="hasil-urease">
+    <div class="result-grid">
+      <div class="result-card"><p>Aktivitas urease</p><p id="urease-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="urease-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-urease"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>44. Aktivitas Enzim Fosfatase</h2>
+  <p class="formula">Aktivitas (µg PNP/g tanah/jam) = (Konsentrasi PNP x Volume ekstrak) / (Berat tanah x waktu inkubasi)</p>
+  <div class="grid">
+    <div><label>Konsentrasi p-nitrofenol/PNP (µg/ml)</label><input type="number" step="0.01" id="fosfatase-konsentrasi" placeholder="misal 30"></div>
+    <div><label>Volume ekstrak (ml)</label><input type="number" step="0.1" id="fosfatase-volume" placeholder="misal 50"></div>
+    <div><label>Berat tanah (g)</label><input type="number" step="0.01" id="fosfatase-berat" placeholder="misal 1"></div>
+    <div><label>Waktu inkubasi (jam)</label><input type="number" step="0.1" id="fosfatase-waktu" placeholder="misal 1"></div>
+  </div>
+  <button onclick="hitungFosfatase()">Hitung aktivitas fosfatase</button>
+  <div class="error" id="err-fosfatase"></div>
+  <div class="result" id="hasil-fosfatase">
+    <div class="result-grid">
+      <div class="result-card"><p>Aktivitas fosfatase</p><p id="fosfatase-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="fosfatase-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-fosfatase"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>45. Aktivitas Enzim β-Glukosidase</h2>
+  <p class="formula">Aktivitas (µg PNP/g tanah/jam) = (Konsentrasi PNP x Volume ekstrak) / (Berat tanah x waktu inkubasi)</p>
+  <div class="grid">
+    <div><label>Konsentrasi p-nitrofenol/PNP (µg/ml)</label><input type="number" step="0.01" id="glukosidase-konsentrasi" placeholder="misal 22"></div>
+    <div><label>Volume ekstrak (ml)</label><input type="number" step="0.1" id="glukosidase-volume" placeholder="misal 50"></div>
+    <div><label>Berat tanah (g)</label><input type="number" step="0.01" id="glukosidase-berat" placeholder="misal 1"></div>
+    <div><label>Waktu inkubasi (jam)</label><input type="number" step="0.1" id="glukosidase-waktu" placeholder="misal 1"></div>
+  </div>
+  <button onclick="hitungGlukosidase()">Hitung aktivitas β-glukosidase</button>
+  <div class="error" id="err-glukosidase"></div>
+  <div class="result" id="hasil-glukosidase">
+    <div class="result-grid">
+      <div class="result-card"><p>Aktivitas β-glukosidase</p><p id="glukosidase-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="glukosidase-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-glukosidase"></p></div>
+  </div>
+</div>
+
+<div class="group-label">Soil Health / Kesuburan Terpadu</div>
+
+<div class="section">
+  <h2>46. Diagnostik Kesehatan Tanah Terpadu</h2>
+  <p class="formula">Menggabungkan status kimia, fisika, dan biologi menjadi Soil Health Score, Soil Health Index, Indeks Kesuburan Tanah, diagnosis, identifikasi masalah, dan rekomendasi</p>
+  <div class="grid">
+    <div><label>pH tanah</label><input type="number" step="0.1" id="sh-ph" placeholder="misal 5.8"></div>
+    <div><label>C-organik (%)</label><input type="number" step="0.01" id="sh-corg" placeholder="misal 2.1"></div>
+    <div><label>N-total (%)</label><input type="number" step="0.01" id="sh-ntotal" placeholder="misal 0.18"></div>
+    <div><label>P-tersedia (ppm)</label><input type="number" step="0.1" id="sh-p" placeholder="misal 12.5"></div>
+    <div><label>K-tukar (me/100g)</label><input type="number" step="0.01" id="sh-k" placeholder="misal 0.35"></div>
+    <div><label>KTK (me/100g)</label><input type="number" step="0.1" id="sh-ktk" placeholder="misal 18.4"></div>
+    <div><label>Kejenuhan Basa / KB (%) — opsional</label><input type="number" step="0.1" id="sh-kb" placeholder="misal 45"></div>
+    <div><label>Bobot Volume / BV (g/cm3) — opsional</label><input type="number" step="0.01" id="sh-bv" placeholder="misal 1.2"></div>
+    <div><label>Permeabilitas/laju infiltrasi (cm/jam) — opsional</label><input type="number" step="0.01" id="sh-permea" placeholder="misal 4.5"></div>
+    <div>
+      <label>Kelompok mikroba (untuk populasi) — opsional</label>
+      <select id="sh-kelompok">
+        <option value="bakteri">Bakteri</option>
+        <option value="jamur">Jamur</option>
+        <option value="aktinomicetes">Aktinomicetes</option>
+      </select>
+    </div>
+    <div><label>Populasi mikroba/TPC (CFU/g) — opsional</label><input type="number" step="any" id="sh-tpc" placeholder="misal 2500000"></div>
+  </div>
+  <button onclick="hitungSoilHealth()">Diagnosis kesehatan tanah</button>
+  <div class="error" id="err-sh"></div>
+  <div class="result" id="hasil-sh">
+    <div class="result-grid">
+      <div class="result-card"><p>Soil Health Score</p><p id="sh-shs-val"></p></div>
+      <div class="result-card"><p>Soil Health Index</p><p id="sh-shi-val"></p></div>
+      <div class="result-card"><p>Indeks Kesuburan Tanah</p><p id="sh-ikt-val"></p></div>
+      <div class="result-card"><p>Status Kimia Tanah</p><p id="sh-statuskimia-val"></p></div>
+      <div class="result-card"><p>Status Fisika Tanah</p><p id="sh-statusfisika-val"></p></div>
+      <div class="result-card"><p>Status Biologi Tanah</p><p id="sh-statusbio-val"></p></div>
+    </div>
+    <div class="narasi-box" style="margin-bottom:10px;"><p>Diagnosis kesehatan tanah</p><p id="narasi-sh-diagnosis"></p></div>
+    <div class="narasi-box" style="margin-bottom:10px;"><p>Identifikasi masalah tanah</p><p id="narasi-sh-masalah"></p></div>
+    <div class="narasi-box" style="margin-bottom:10px;"><p>Rekomendasi pengelolaan tanah</p><p id="narasi-sh-pengelolaan"></p></div>
+    <div class="narasi-box"><p>Rekomendasi perbaikan tanah</p><p id="narasi-sh-perbaikan"></p></div>
+  </div>
+</div>
+
+<div class="group-label">Air &amp; Irigasi</div>
+
+<div class="section">
+  <h2>47. Evapotranspirasi Acuan (ET0) — metode Hargreaves-Samani</h2>
+  <p class="formula">ET0 (mm/hari) = 0.0023 x (Tmean + 17.8) x akar(Tmax - Tmin) x Ra</p>
+  <div class="grid">
+    <div><label>Suhu maksimum / Tmax (°C)</label><input type="number" step="0.1" id="eto-tmax" placeholder="misal 32"></div>
+    <div><label>Suhu minimum / Tmin (°C)</label><input type="number" step="0.1" id="eto-tmin" placeholder="misal 23"></div>
+    <div><label>Suhu rata-rata / Tmean (°C) — kosongkan untuk otomatis (Tmax+Tmin)/2</label><input type="number" step="0.1" id="eto-tmean" placeholder="opsional"></div>
+    <div><label>Radiasi ekstraterestrial / Ra (mm/hari)</label><input type="number" step="0.01" id="eto-ra" placeholder="misal 15.2"></div>
+  </div>
+  <button onclick="hitungETo()">Hitung ET0</button>
+  <div class="error" id="err-eto"></div>
+  <div class="result" id="hasil-eto">
+    <div class="result-grid">
+      <div class="result-card"><p>ET0</p><p id="eto-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="eto-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-eto"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>48. Evapotranspirasi Tanaman (ETc)</h2>
+  <p class="formula">ETc (mm/hari) = ET0 x Kc</p>
+  <div class="grid">
+    <div><label>ET0 (mm/hari)</label><input type="number" step="0.01" id="etc-eto" placeholder="misal 4.8"></div>
+    <div><label>Koefisien tanaman / Kc</label><input type="number" step="0.01" id="etc-kc" placeholder="misal 1.05"></div>
+  </div>
+  <button onclick="hitungETc()">Hitung ETc</button>
+  <div class="error" id="err-etc"></div>
+  <div class="result" id="hasil-etc">
+    <div class="result-card" style="margin-bottom:14px;"><p>ETc</p><p id="etc-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-etc"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>49. Kebutuhan Air Tanaman (Crop Water Requirement)</h2>
+  <p class="formula">CWR (mm/periode) = (ETc - Curah hujan efektif) x jumlah hari periode</p>
+  <div class="grid">
+    <div><label>ETc (mm/hari)</label><input type="number" step="0.01" id="cwr-etc" placeholder="misal 5.0"></div>
+    <div><label>Curah hujan efektif / Peff (mm/hari)</label><input type="number" step="0.01" id="cwr-peff" placeholder="misal 1.2"></div>
+    <div><label>Jumlah hari periode</label><input type="number" step="1" id="cwr-hari" placeholder="misal 7"></div>
+  </div>
+  <button onclick="hitungCWR()">Hitung kebutuhan air tanaman</button>
+  <div class="error" id="err-cwr"></div>
+  <div class="result" id="hasil-cwr">
+    <div class="result-grid">
+      <div class="result-card"><p>Kebutuhan air per periode</p><p id="cwr-total-val"></p></div>
+      <div class="result-card"><p>Setara per hari</p><p id="cwr-harian-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-cwr"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>50. Kebutuhan Air Irigasi (volume &amp; debit untuk luas lahan)</h2>
+  <p class="formula">Volume bersih (m3) = CWR(mm) x luas(ha) x 10; Volume kotor = Volume bersih / efisiensi irigasi; Debit (L/detik) = Volume kotor x 1000 / (interval x 24 x 3600)</p>
+  <div class="grid">
+    <div><label>Kebutuhan air tanaman / CWR (mm per interval)</label><input type="number" step="0.01" id="kai-cwr" placeholder="misal 35"></div>
+    <div><label>Luas lahan (ha)</label><input type="number" step="0.01" id="kai-luas" placeholder="misal 1"></div>
+    <div><label>Efisiensi irigasi keseluruhan (%)</label><input type="number" step="0.1" id="kai-ei" placeholder="misal 60"></div>
+    <div><label>Interval pemberian irigasi (hari)</label><input type="number" step="0.1" id="kai-interval" placeholder="misal 7"></div>
+  </div>
+  <button onclick="hitungKAI()">Hitung kebutuhan air irigasi</button>
+  <div class="error" id="err-kai"></div>
+  <div class="result" id="hasil-kai">
+    <div class="result-grid">
+      <div class="result-card"><p>Volume irigasi kotor</p><p id="kai-volume-val"></p></div>
+      <div class="result-card"><p>Debit dibutuhkan</p><p id="kai-debit-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-kai"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>51. Efisiensi Irigasi</h2>
+  <p class="formula">Efisiensi irigasi (%) = (air yang dimanfaatkan tanaman / air yang diberikan) x 100</p>
+  <div class="grid">
+    <div><label>Air yang diberikan (m3 atau liter)</label><input type="number" step="0.01" id="ei-diberikan" placeholder="misal 1000"></div>
+    <div><label>Air yang dimanfaatkan tanaman (satuan sama)</label><input type="number" step="0.01" id="ei-dimanfaatkan" placeholder="misal 650"></div>
+  </div>
+  <button onclick="hitungEi()">Hitung efisiensi irigasi</button>
+  <div class="error" id="err-ei"></div>
+  <div class="result" id="hasil-ei">
+    <div class="result-grid">
+      <div class="result-card"><p>Efisiensi irigasi</p><p id="ei-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="ei-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-ei"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>52. Penyimpanan Air Tanah (Total Available Water pada zona perakaran)</h2>
+  <p class="formula">TAW (mm) = ((KL - TLP) / 100) x BV x kedalaman perakaran x 10</p>
+  <div class="grid">
+    <div><label>Kapasitas Lapang / KL (%)</label><input type="number" step="0.1" id="taw-kl" placeholder="misal 32"></div>
+    <div><label>Titik Layu Permanen / TLP (%)</label><input type="number" step="0.1" id="taw-tlp" placeholder="misal 15"></div>
+    <div><label>Bobot Volume / BV (g/cm3)</label><input type="number" step="0.01" id="taw-bv" placeholder="misal 1.2"></div>
+    <div><label>Kedalaman perakaran efektif (cm)</label><input type="number" step="0.1" id="taw-depth" placeholder="misal 30"></div>
+  </div>
+  <button onclick="hitungTAW()">Hitung penyimpanan air tanah</button>
+  <div class="error" id="err-taw"></div>
+  <div class="result" id="hasil-taw">
+    <div class="result-grid">
+      <div class="result-card"><p>Total Available Water</p><p id="taw-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="taw-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-taw"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>53. Soil Water Depletion (SWD)</h2>
+  <p class="formula">SWD (%) = (KL - kadar air aktual) / (KL - TLP) x 100</p>
+  <div class="grid">
+    <div><label>Kapasitas Lapang / KL (%)</label><input type="number" step="0.1" id="swd-kl" placeholder="misal 32"></div>
+    <div><label>Titik Layu Permanen / TLP (%)</label><input type="number" step="0.1" id="swd-tlp" placeholder="misal 15"></div>
+    <div><label>Kadar air aktual saat ini (%)</label><input type="number" step="0.1" id="swd-aktual" placeholder="misal 22"></div>
+  </div>
+  <button onclick="hitungSWD()">Hitung soil water depletion</button>
+  <div class="error" id="err-swd"></div>
+  <div class="result" id="hasil-swd">
+    <div class="result-grid">
+      <div class="result-card"><p>Soil Water Depletion</p><p id="swd-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="swd-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-swd"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>54. Net Irrigation Requirement (NIR)</h2>
+  <p class="formula">NIR (mm) = ETc - Curah hujan efektif (Peff)</p>
+  <div class="grid">
+    <div><label>ETc (mm per periode)</label><input type="number" step="0.01" id="nir-etc" placeholder="misal 35"></div>
+    <div><label>Curah hujan efektif / Peff (mm per periode)</label><input type="number" step="0.01" id="nir-peff" placeholder="misal 8"></div>
+  </div>
+  <button onclick="hitungNIR()">Hitung NIR</button>
+  <div class="error" id="err-nir"></div>
+  <div class="result" id="hasil-nir">
+    <div class="result-grid">
+      <div class="result-card"><p>Net Irrigation Requirement</p><p id="nir-val"></p></div>
+      <div class="result-card"><p>Klasifikasi</p><p id="nir-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-nir"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>55. Gross Irrigation Requirement (GIR)</h2>
+  <p class="formula">GIR (mm) = NIR / efisiensi irigasi</p>
+  <div class="grid">
+    <div><label>Net Irrigation Requirement / NIR (mm)</label><input type="number" step="0.01" id="gir-nir" placeholder="misal 27"></div>
+    <div><label>Efisiensi irigasi (%)</label><input type="number" step="0.1" id="gir-ei" placeholder="misal 60"></div>
+  </div>
+  <button onclick="hitungGIR()">Hitung GIR</button>
+  <div class="error" id="err-gir"></div>
+  <div class="result" id="hasil-gir">
+    <div class="result-card" style="margin-bottom:14px;"><p>Gross Irrigation Requirement</p><p id="gir-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-gir"></p></div>
+  </div>
+</div>
+
+<div class="group-label">Laboratorium</div>
+
+<div class="section">
+  <h2>56. Pengenceran (C1V1 = C2V2)</h2>
+  <p class="formula">V1 = (C2 x V2) / C1; Volume pelarut ditambahkan = V2 - V1</p>
+  <div class="grid">
+    <div><label>Konsentrasi larutan pekat / stok, C1 (M, %, atau ppm)</label><input type="number" step="0.0001" id="peng-c1" placeholder="misal 5"></div>
+    <div><label>Konsentrasi larutan akhir yang diinginkan, C2</label><input type="number" step="0.0001" id="peng-c2" placeholder="misal 0.5"></div>
+    <div><label>Volume akhir yang diinginkan, V2 (mL)</label><input type="number" step="0.01" id="peng-v2" placeholder="misal 100"></div>
+  </div>
+  <button onclick="hitungPengenceran()">Hitung pengenceran</button>
+  <div class="error" id="err-peng"></div>
+  <div class="result" id="hasil-peng">
+    <div class="result-grid">
+      <div class="result-card"><p>Volume larutan pekat dibutuhkan (V1)</p><p id="peng-v1-val"></p></div>
+      <div class="result-card"><p>Volume pelarut ditambahkan</p><p id="peng-pelarut-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-peng"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>57. Pengenceran Berseri (Serial Dilution)</h2>
+  <p class="formula">Cn = C0 / (faktor pengenceran)^n</p>
+  <div class="grid">
+    <div><label>Konsentrasi awal, C0</label><input type="number" step="0.0001" id="serial-c0" placeholder="misal 1000000"></div>
+    <div><label>Faktor pengenceran tiap tahap (misal 10 untuk 1:10)</label><input type="number" step="0.01" id="serial-faktor" placeholder="misal 10"></div>
+    <div><label>Jumlah tahap pengenceran</label><input type="number" step="1" id="serial-tahap" placeholder="misal 5"></div>
+  </div>
+  <button onclick="hitungSerial()">Hitung pengenceran berseri</button>
+  <div class="error" id="err-serial"></div>
+  <div class="result" id="hasil-serial">
+    <div class="result-grid">
+      <div class="result-card"><p>Konsentrasi tahap akhir</p><p id="serial-akhir-val"></p></div>
+      <div class="result-card"><p>Total faktor pengenceran</p><p id="serial-totalfaktor-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Konsentrasi tiap tahap</p><p id="serial-steps"></p></div>
+    <div class="narasi-box" style="margin-top:10px;"><p>Draf kalimat pembahasan</p><p id="narasi-serial"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>58. Molaritas</h2>
+  <p class="formula">M (mol/L) = (massa zat terlarut (g) / BM (g/mol)) / volume larutan (L)</p>
+  <div class="grid">
+    <div><label>Massa zat terlarut (gram)</label><input type="number" step="0.0001" id="mol-massa" placeholder="misal 5.85"></div>
+    <div><label>Berat molekul / BM (g/mol)</label><input type="number" step="0.01" id="mol-bm" placeholder="misal 58.5 (NaCl)"></div>
+    <div><label>Volume larutan (mL)</label><input type="number" step="0.01" id="mol-volume" placeholder="misal 1000"></div>
+  </div>
+  <button onclick="hitungMolaritas()">Hitung molaritas</button>
+  <div class="error" id="err-mol"></div>
+  <div class="result" id="hasil-mol">
+    <div class="result-card" style="margin-bottom:14px;"><p>Molaritas</p><p id="mol-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-mol"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>59. Normalitas</h2>
+  <p class="formula">N (ek/L) = M x valensi (jumlah ekivalen)</p>
+  <div class="grid">
+    <div><label>Molaritas, M (mol/L)</label><input type="number" step="0.0001" id="norm-molar" placeholder="misal 0.1"></div>
+    <div><label>Valensi / jumlah ekivalen (n)</label><input type="number" step="1" id="norm-valensi" placeholder="misal 2 (untuk H2SO4)"></div>
+  </div>
+  <button onclick="hitungNormalitas()">Hitung normalitas</button>
+  <div class="error" id="err-norm"></div>
+  <div class="result" id="hasil-norm">
+    <div class="result-card" style="margin-bottom:14px;"><p>Normalitas</p><p id="norm-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-norm"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>60. Konsentrasi Larutan (ppm / mg per L)</h2>
+  <p class="formula">Konsentrasi (ppm = mg/L) = massa zat terlarut (mg) / volume larutan (L)</p>
+  <div class="grid">
+    <div><label>Massa zat terlarut (mg)</label><input type="number" step="0.0001" id="konlar-massa" placeholder="misal 50"></div>
+    <div><label>Volume larutan (mL)</label><input type="number" step="0.01" id="konlar-volume" placeholder="misal 500"></div>
+  </div>
+  <button onclick="hitungKonsentrasi()">Hitung konsentrasi</button>
+  <div class="error" id="err-konlar"></div>
+  <div class="result" id="hasil-konlar">
+    <div class="result-grid">
+      <div class="result-card"><p>Konsentrasi</p><p id="konlar-ppm-val"></p></div>
+      <div class="result-card"><p>Setara persen (%b/v)</p><p id="konlar-persen-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-konlar"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>61. Persen Larutan (%b/b, %b/v, %v/v)</h2>
+  <p class="formula">Persen (%) = (jumlah zat terlarut / jumlah total larutan) x 100</p>
+  <div class="grid">
+    <div>
+      <label>Tipe persen larutan</label>
+      <select id="perslar-tipe" style="width:100%;height:38px;padding:0 10px;border:1px solid #ccc;border-radius:6px;font-size:14px;">
+        <option value="b/v">% b/v (gram zat per 100 mL larutan)</option>
+        <option value="b/b">% b/b (gram zat per 100 gram larutan)</option>
+        <option value="v/v">% v/v (mL zat per 100 mL larutan)</option>
+      </select>
+    </div>
+    <div><label>Jumlah zat terlarut (gram atau mL, sesuai tipe)</label><input type="number" step="0.0001" id="perslar-zat" placeholder="misal 10"></div>
+    <div><label>Jumlah total larutan (gram atau mL, sesuai tipe)</label><input type="number" step="0.01" id="perslar-total" placeholder="misal 100"></div>
+  </div>
+  <button onclick="hitungPersenLarutan()">Hitung persen larutan</button>
+  <div class="error" id="err-perslar"></div>
+  <div class="result" id="hasil-perslar">
+    <div class="result-card" style="margin-bottom:14px;"><p>Persen larutan</p><p id="perslar-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-perslar"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>62. Perhitungan Blanko</h2>
+  <p class="formula">Absorbansi terkoreksi = Absorbansi sampel - Absorbansi blanko</p>
+  <div class="grid">
+    <div><label>Absorbansi sampel</label><input type="number" step="0.0001" id="blanko-sampel" placeholder="misal 0.452"></div>
+    <div><label>Absorbansi blanko</label><input type="number" step="0.0001" id="blanko-blanko" placeholder="misal 0.028"></div>
+  </div>
+  <button onclick="hitungBlanko()">Hitung koreksi blanko</button>
+  <div class="error" id="err-blanko"></div>
+  <div class="result" id="hasil-blanko">
+    <div class="result-card" style="margin-bottom:14px;"><p>Absorbansi terkoreksi</p><p id="blanko-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-blanko"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>63. Faktor Koreksi Larutan Titran</h2>
+  <p class="formula">N sebenarnya = (V baku primer x N baku primer) / V titran; Faktor koreksi (FK) = N sebenarnya / N teoritis</p>
+  <div class="grid">
+    <div><label>Volume larutan baku primer (mL)</label><input type="number" step="0.01" id="fk-vbaku" placeholder="misal 10"></div>
+    <div><label>Normalitas larutan baku primer (N)</label><input type="number" step="0.0001" id="fk-nbaku" placeholder="misal 0.1"></div>
+    <div><label>Volume titran terpakai saat standardisasi (mL)</label><input type="number" step="0.01" id="fk-vtitran" placeholder="misal 9.8"></div>
+    <div><label>Normalitas teoritis titran (N)</label><input type="number" step="0.0001" id="fk-nteori" placeholder="misal 0.1"></div>
+  </div>
+  <button onclick="hitungFK()">Hitung faktor koreksi</button>
+  <div class="error" id="err-fk"></div>
+  <div class="result" id="hasil-fk">
+    <div class="result-grid">
+      <div class="result-card"><p>Normalitas sebenarnya titran</p><p id="fk-nsebenarnya-val"></p></div>
+      <div class="result-card"><p>Faktor Koreksi (FK)</p><p id="fk-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-fk"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>64. Perhitungan Kadar Sampel Laboratorium</h2>
+  <p class="formula">Kadar unsur (%) = (ppm kurva x volume ekstrak (mL) x faktor pengenceran) / (berat sampel (mg) x 10)</p>
+  <div class="grid">
+    <div><label>Konsentrasi terbaca dari kurva standar (ppm)</label><input type="number" step="0.0001" id="labsampel-ppm" placeholder="misal 2.5"></div>
+    <div><label>Volume ekstrak / pelarut (mL)</label><input type="number" step="0.01" id="labsampel-vekstrak" placeholder="misal 50"></div>
+    <div><label>Faktor pengenceran (FP)</label><input type="number" step="0.01" id="labsampel-fp" placeholder="misal 1"></div>
+    <div><label>Berat sampel (mg)</label><input type="number" step="0.01" id="labsampel-berat" placeholder="misal 500"></div>
+  </div>
+  <button onclick="hitungLabSampel()">Hitung kadar sampel</button>
+  <div class="error" id="err-labsampel"></div>
+  <div class="result" id="hasil-labsampel">
+    <div class="result-card" style="margin-bottom:14px;"><p>Kadar unsur dalam sampel</p><p id="labsampel-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-labsampel"></p></div>
+  </div>
+</div>
+
+<div class="group-label">Statistik Data Tanah</div>
+
+<div class="section">
+  <h2>65. Statistik Deskriptif</h2>
+  <p class="formula">Mean, Median, Modus, Min &amp; Maks, Standar Deviasi, Variance, CV, dan SE dihitung sekaligus dari satu set data</p>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div>
+      <label>Data (pisahkan dengan koma, spasi, atau baris baru)</label>
+      <textarea id="desk-data" placeholder="misal: 5.2, 5.8, 6.1, 5.5, 5.9, 6.3, 5.7"></textarea>
+    </div>
+  </div>
+  <button onclick="hitungDeskriptif()">Hitung statistik deskriptif</button>
+  <div class="error" id="err-desk"></div>
+  <div class="result" id="hasil-desk">
+    <div class="result-grid">
+      <div class="result-card"><p>Jumlah data (n)</p><p id="desk-n"></p></div>
+      <div class="result-card"><p>Mean</p><p id="desk-mean"></p></div>
+      <div class="result-card"><p>Median</p><p id="desk-median"></p></div>
+      <div class="result-card"><p>Modus</p><p id="desk-modus"></p></div>
+      <div class="result-card"><p>Minimum</p><p id="desk-min"></p></div>
+      <div class="result-card"><p>Maksimum</p><p id="desk-max"></p></div>
+      <div class="result-card"><p>Range</p><p id="desk-range"></p></div>
+      <div class="result-card"><p>Standar Deviasi</p><p id="desk-sd"></p></div>
+      <div class="result-card"><p>Variance</p><p id="desk-var"></p></div>
+      <div class="result-card"><p>Coefficient of Variation</p><p id="desk-cv"></p></div>
+      <div class="result-card"><p>Standard Error (SE)</p><p id="desk-se"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-desk"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>66. Confidence Interval (CI) Rata-rata</h2>
+  <p class="formula">CI = mean +/- z x SE, dengan SE = SD / akar(n)</p>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div>
+      <label>Data (pisahkan dengan koma, spasi, atau baris baru)</label>
+      <textarea id="ci-data" placeholder="misal: 5.2, 5.8, 6.1, 5.5, 5.9, 6.3, 5.7"></textarea>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <label>Tingkat kepercayaan</label>
+      <select id="ci-level">
+        <option value="1.645">90%</option>
+        <option value="1.96" selected>95%</option>
+        <option value="2.576">99%</option>
+      </select>
+    </div>
+  </div>
+  <p class="hint">Menggunakan nilai z (bukan tabel-t); cukup akurat untuk n relatif besar (n &gt;= 30) dan sudah lazim dipakai untuk laporan praktikum.</p>
+  <button onclick="hitungCI()">Hitung confidence interval</button>
+  <div class="error" id="err-ci"></div>
+  <div class="result" id="hasil-ci">
+    <div class="result-grid">
+      <div class="result-card"><p>Mean</p><p id="ci-mean"></p></div>
+      <div class="result-card"><p>Standard Error (SE)</p><p id="ci-se"></p></div>
+      <div class="result-card"><p>Batas bawah CI</p><p id="ci-lower"></p></div>
+      <div class="result-card"><p>Batas atas CI</p><p id="ci-upper"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-ci"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>67. Korelasi (Pearson r)</h2>
+  <p class="formula">r = (n.SIGMAxy - SIGMAx.SIGMAy) / akar[(n.SIGMAx2 - (SIGMAx)2)(n.SIGMAy2 - (SIGMAy)2)]</p>
+  <div class="grid">
+    <div>
+      <label>Data variabel X (pisahkan dengan koma/spasi/baris baru)</label>
+      <textarea id="korel-x" placeholder="misal: 10, 15, 20, 25, 30"></textarea>
+    </div>
+    <div>
+      <label>Data variabel Y (jumlah data harus sama dengan X)</label>
+      <textarea id="korel-y" placeholder="misal: 2.1, 2.8, 3.5, 4.0, 4.6"></textarea>
+    </div>
+  </div>
+  <button onclick="hitungKorelasi()">Hitung korelasi</button>
+  <div class="error" id="err-korel"></div>
+  <div class="result" id="hasil-korel">
+    <div class="result-grid">
+      <div class="result-card"><p>Jumlah pasangan data (n)</p><p id="korel-n"></p></div>
+      <div class="result-card"><p>Koefisien korelasi (r)</p><p id="korel-r"></p></div>
+      <div class="result-card"><p>Interpretasi</p><p id="korel-out"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-korel"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>68. Regresi Linear Sederhana</h2>
+  <p class="formula">Y = a + bX; b = kemiringan (slope), a = intersep, R2 = koefisien determinasi</p>
+  <div class="grid">
+    <div>
+      <label>Data variabel X / bebas (pisahkan dengan koma/spasi/baris baru)</label>
+      <textarea id="reg-x" placeholder="misal: 10, 15, 20, 25, 30"></textarea>
+    </div>
+    <div>
+      <label>Data variabel Y / terikat (jumlah data harus sama dengan X)</label>
+      <textarea id="reg-y" placeholder="misal: 2.1, 2.8, 3.5, 4.0, 4.6"></textarea>
+    </div>
+  </div>
+  <button onclick="hitungRegresi()">Hitung regresi linear</button>
+  <div class="error" id="err-reg"></div>
+  <div class="result" id="hasil-reg">
+    <div class="result-grid">
+      <div class="result-card"><p>Persamaan regresi</p><p id="reg-persamaan"></p></div>
+      <div class="result-card"><p>Koefisien determinasi (R2)</p><p id="reg-r2"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-reg"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>69. Scatter Plot</h2>
+  <p class="formula">Diagram pencar X vs Y, dilengkapi garis tren regresi linear</p>
+  <div class="grid">
+    <div>
+      <label>Data variabel X (pisahkan dengan koma/spasi/baris baru)</label>
+      <textarea id="scatter-x" placeholder="misal: 10, 15, 20, 25, 30"></textarea>
+    </div>
+    <div>
+      <label>Data variabel Y (jumlah data harus sama dengan X)</label>
+      <textarea id="scatter-y" placeholder="misal: 2.1, 2.8, 3.5, 4.0, 4.6"></textarea>
+    </div>
+  </div>
+  <button onclick="buatScatter()">Buat scatter plot</button>
+  <div class="error" id="err-scatter"></div>
+  <div class="result" id="hasil-scatter">
+    <canvas class="chart-canvas" id="scatter-canvas" width="640" height="380"></canvas>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-scatter"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>70. Histogram</h2>
+  <p class="formula">Distribusi frekuensi data dikelompokkan ke dalam beberapa kelas (bin)</p>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div>
+      <label>Data (pisahkan dengan koma, spasi, atau baris baru)</label>
+      <textarea id="histo-data" placeholder="misal: 5.2, 5.8, 6.1, 5.5, 5.9, 6.3, 5.7, 6.0, 5.4, 6.2"></textarea>
+    </div>
+  </div>
+  <div class="grid">
+    <div><label>Jumlah kelas / bin (kosongkan untuk otomatis, aturan Sturges)</label><input type="number" step="1" id="histo-bins" placeholder="misal 5"></div>
+  </div>
+  <button onclick="buatHistogram()">Buat histogram</button>
+  <div class="error" id="err-histo"></div>
+  <div class="result" id="hasil-histo">
+    <canvas class="chart-canvas" id="histo-canvas" width="640" height="380"></canvas>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-histo"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>71. Box Plot</h2>
+  <p class="formula">Q1, Median (Q2), Q3, IQR = Q3-Q1; pagar bawah/atas = Q1-1.5xIQR / Q3+1.5xIQR</p>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div>
+      <label>Data (pisahkan dengan koma, spasi, atau baris baru)</label>
+      <textarea id="bplot-data" placeholder="misal: 5.2, 5.8, 6.1, 5.5, 5.9, 6.3, 5.7, 6.0, 5.4, 9.8"></textarea>
+    </div>
+  </div>
+  <button onclick="buatBoxplot()">Buat box plot</button>
+  <div class="error" id="err-bplot"></div>
+  <div class="result" id="hasil-bplot">
+    <canvas class="chart-canvas" id="bplot-canvas" width="640" height="220"></canvas>
+    <div class="result-grid">
+      <div class="result-card"><p>Q1</p><p id="bplot-q1"></p></div>
+      <div class="result-card"><p>Median (Q2)</p><p id="bplot-q2"></p></div>
+      <div class="result-card"><p>Q3</p><p id="bplot-q3"></p></div>
+      <div class="result-card"><p>IQR</p><p id="bplot-iqr"></p></div>
+      <div class="result-card"><p>Whisker bawah - atas</p><p id="bplot-whisker"></p></div>
+      <div class="result-card"><p>Jumlah outlier</p><p id="bplot-outlier"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-bplot"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>72. Correlation Matrix</h2>
+  <p class="formula">Matriks koefisien korelasi Pearson antar semua pasangan variabel</p>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div>
+      <label>Data (baris pertama = nama variabel dipisah koma; baris berikutnya = nilai dipisah koma)</label>
+      <textarea id="cormat-data" placeholder="pH, C-organik, KTK&#10;5.5, 2.1, 18.4&#10;5.8, 2.4, 19.1&#10;5.2, 1.8, 17.0&#10;6.0, 2.9, 20.5"></textarea>
+    </div>
+  </div>
+  <button onclick="buatCorrMatrix()">Buat correlation matrix</button>
+  <div class="error" id="err-cormat"></div>
+  <div class="result" id="hasil-cormat">
+    <div id="cormat-table"></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-cormat"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>73. Modus Data Kelompok</h2>
+  <p class="formula">Mo = L0 + c x [b1 / (b1 + b2)]</p>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div>
+      <label>Kelas interval &amp; frekuensi (satu baris per kelas, format: batas_bawah-batas_atas, frekuensi)</label>
+      <textarea id="modus-data" placeholder="misal:&#10;20-24, 3&#10;25-29, 6&#10;30-34, 10&#10;35-39, 7&#10;40-44, 4"></textarea>
+    </div>
+  </div>
+  <p class="hint">Contoh di atas: kelas suhu (&deg;C) dengan frekuensi. L0 = tepi bawah kelas modus, c = panjang kelas, b1 = selisih frekuensi kelas modus dengan kelas sebelumnya, b2 = selisih frekuensi kelas modus dengan kelas sesudahnya.</p>
+  <button onclick="hitungModusKelompok()">Hitung modus data kelompok</button>
+  <div class="error" id="err-modus"></div>
+  <div class="result" id="hasil-modus">
+    <div class="result-grid">
+      <div class="result-card"><p>Kelas modus</p><p id="modus-kelas"></p></div>
+      <div class="result-card"><p>Tepi bawah kelas (L0)</p><p id="modus-l0"></p></div>
+      <div class="result-card"><p>Panjang kelas (c)</p><p id="modus-c"></p></div>
+      <div class="result-card"><p>b1</p><p id="modus-b1"></p></div>
+      <div class="result-card"><p>b2</p><p id="modus-b2"></p></div>
+      <div class="result-card"><p>Modus (Mo)</p><p id="modus-hasil"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-modus"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>74. Median Data Kelompok</h2>
+  <p class="formula">Me = L0 + c x [(n/2 - F) / f]</p>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div>
+      <label>Kelas interval &amp; frekuensi (satu baris per kelas, format: batas_bawah-batas_atas, frekuensi)</label>
+      <textarea id="median-data" placeholder="misal:&#10;20-24, 3&#10;25-29, 6&#10;30-34, 10&#10;35-39, 7&#10;40-44, 4"></textarea>
+    </div>
+  </div>
+  <p class="hint">L0 = tepi bawah kelas median, c = panjang kelas, n = jumlah seluruh frekuensi, F = frekuensi kumulatif sebelum kelas median, f = frekuensi kelas median.</p>
+  <button onclick="hitungMedianKelompok()">Hitung median data kelompok</button>
+  <div class="error" id="err-median"></div>
+  <div class="result" id="hasil-median">
+    <div class="result-grid">
+      <div class="result-card"><p>Kelas median</p><p id="median-kelas"></p></div>
+      <div class="result-card"><p>Tepi bawah kelas (L0)</p><p id="median-l0"></p></div>
+      <div class="result-card"><p>Panjang kelas (c)</p><p id="median-c"></p></div>
+      <div class="result-card"><p>n</p><p id="median-n"></p></div>
+      <div class="result-card"><p>Frekuensi kumulatif sebelum (F)</p><p id="median-F"></p></div>
+      <div class="result-card"><p>Frekuensi kelas median (f)</p><p id="median-f"></p></div>
+      <div class="result-card"><p>Median (Me)</p><p id="median-hasil"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-median"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>75. Rata-Rata Ukur (Geometric Mean) — Data Tunggal</h2>
+  <p class="formula">U = akar-pangkat-n dari (x1 &times; x2 &times; x3 &times; ... &times; xn)</p>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div>
+      <label>Data (pisahkan dengan koma, spasi, atau baris baru — semua nilai harus &gt; 0)</label>
+      <textarea id="ukur-data" placeholder="misal: 5.2, 5.8, 6.1, 5.5, 5.9, 6.3, 5.7"></textarea>
+    </div>
+  </div>
+  <p class="hint">Rata-rata ukur dihitung melalui logaritma (U = antilog dari rata-rata log xi) agar tetap stabil untuk data dengan jumlah (n) besar. Cocok untuk data laju pertumbuhan, rasio, atau data yang bersifat perkalian/eksponensial.</p>
+  <button onclick="hitungRataUkurTunggal()">Hitung rata-rata ukur</button>
+  <div class="error" id="err-ukur"></div>
+  <div class="result" id="hasil-ukur">
+    <div class="result-grid">
+      <div class="result-card"><p>Jumlah data (n)</p><p id="ukur-n"></p></div>
+      <div class="result-card"><p>Rata-rata ukur (U)</p><p id="ukur-hasil"></p></div>
+      <div class="result-card"><p>Rata-rata hitung (mean) pembanding</p><p id="ukur-mean"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-ukur"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>76. Rata-Rata Ukur (Geometric Mean) — Data Kelompok</h2>
+  <p class="formula">U = antilog [ SIGMA(fi . log xi) / SIGMA fi ]</p>
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <div>
+      <label>Kelas interval &amp; frekuensi (satu baris per kelas, format: batas_bawah-batas_atas, frekuensi)</label>
+      <textarea id="ukurkel-data" placeholder="misal:&#10;20-24, 3&#10;25-29, 6&#10;30-34, 10&#10;35-39, 7&#10;40-44, 4"></textarea>
+    </div>
+  </div>
+  <p class="hint">xi = nilai tengah tiap kelas ((batas bawah + batas atas)/2), fi = frekuensi kelas. Semua nilai tengah kelas harus bernilai positif (&gt; 0).</p>
+  <button onclick="hitungRataUkurKelompok()">Hitung rata-rata ukur data kelompok</button>
+  <div class="error" id="err-ukurkel"></div>
+  <div class="result" id="hasil-ukurkel">
+    <div class="result-grid">
+      <div class="result-card"><p>SIGMA fi (n)</p><p id="ukurkel-n"></p></div>
+      <div class="result-card"><p>SIGMA (fi . log xi)</p><p id="ukurkel-sumflog"></p></div>
+      <div class="result-card"><p>Rata-rata ukur (U)</p><p id="ukurkel-hasil"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-ukurkel"></p></div>
+  </div>
+</div>
+
+<div class="group-label">Statistik Data Tanah — lanjutan</div>
+<!-- ===== 77-82. Kuartil, Desil, Persentil ===== -->
+<div class="group-label">Analisis Letak Data</div>
+
+<div class="section">
+  <h2>77. Kuartil Data Tunggal</h2>
+  <div class="grid">
+    <div style="grid-column:1/-1"><label>Data (pisahkan dengan koma/spasi)</label><textarea id="qt-data" rows="4" placeholder="misal: 4, 7, 8, 10, 12, 15, 18, 20"></textarea></div>
+    <div><label>Kuartil k (1–3)</label><input type="number" id="qt-k" min="1" max="3" step="1" value="1"></div>
+  </div>
+  <button type="button" onclick="hitungQtTunggal()">Hitung Kuartil</button>
+  <div class="error" id="err-qt-tunggal" style="display:none"></div>
+  <div class="result" id="hasil-qt-tunggal" style="display:none"><div class="result-card"><p>Hasil Kuartil</p><p id="qt-tunggal-val"></p></div></div>
+</div>
+
+<div class="section">
+  <h2>78. Kuartil Data Kelompok</h2>
+  <div class="grid">
+    <div style="grid-column:1/-1"><label>Tabel kelas–frekuensi (satu kelas per baris)</label><textarea id="qtg-data" rows="5" placeholder="20-24, 8&#10;25-29, 12&#10;30-34, 10"></textarea></div>
+    <div><label>Kuartil k (1–3)</label><input type="number" id="qtg-k" min="1" max="3" step="1" value="1"></div>
+  </div>
+  <p class="hint">Format: <strong>batas_bawah-batas_atas, frekuensi</strong>. Rumus: Qk = L₀ + c × [(k×n/4 − F) / f].</p>
+  <button type="button" onclick="hitungQtKelompok()">Hitung Kuartil Kelompok</button>
+  <div class="error" id="err-qt-kelompok" style="display:none"></div>
+  <div class="result" id="hasil-qt-kelompok" style="display:none"><div class="result-card"><p>Hasil Kuartil</p><p id="qt-kelompok-val"></p></div></div>
+</div>
+
+<div class="section">
+  <h2>79. Desil Data Tunggal</h2>
+  <div class="grid">
+    <div style="grid-column:1/-1"><label>Data (pisahkan dengan koma/spasi)</label><textarea id="ds-data" rows="4" placeholder="misal: 4, 7, 8, 10, 12, 15, 18, 20"></textarea></div>
+    <div><label>Desil k (1–9)</label><input type="number" id="ds-k" min="1" max="9" step="1" value="5"></div>
+  </div>
+  <button type="button" onclick="hitungDsTunggal()">Hitung Desil</button>
+  <div class="error" id="err-ds-tunggal" style="display:none"></div>
+  <div class="result" id="hasil-ds-tunggal" style="display:none"><div class="result-card"><p>Hasil Desil</p><p id="ds-tunggal-val"></p></div></div>
+</div>
+
+<div class="section">
+  <h2>80. Desil Data Kelompok</h2>
+  <div class="grid">
+    <div style="grid-column:1/-1"><label>Tabel kelas–frekuensi</label><textarea id="dsg-data" rows="5" placeholder="20-24, 8&#10;25-29, 12&#10;30-34, 10"></textarea></div>
+    <div><label>Desil k (1–9)</label><input type="number" id="dsg-k" min="1" max="9" step="1" value="5"></div>
+  </div>
+  <p class="hint">Rumus: Dk = L₀ + c × [(k×n/10 − F) / f].</p>
+  <button type="button" onclick="hitungDsKelompok()">Hitung Desil Kelompok</button>
+  <div class="error" id="err-ds-kelompok" style="display:none"></div>
+  <div class="result" id="hasil-ds-kelompok" style="display:none"><div class="result-card"><p>Hasil Desil</p><p id="ds-kelompok-val"></p></div></div>
+</div>
+
+<div class="section">
+  <h2>81. Persentil Data Tunggal</h2>
+  <div class="grid">
+    <div style="grid-column:1/-1"><label>Data (pisahkan dengan koma/spasi)</label><textarea id="ps-data" rows="4" placeholder="misal: 4, 7, 8, 10, 12, 15, 18, 20"></textarea></div>
+    <div><label>Persentil k (1–99)</label><input type="number" id="ps-k" min="1" max="99" step="1" value="50"></div>
+  </div>
+  <p class="hint">Posisi Pk = k×(n+1)/100. Jika posisi pecahan, digunakan interpolasi: data bawah + sisa pecahan × (data atas − data bawah).</p>
+  <button type="button" onclick="hitungPsTunggal()">Hitung Persentil</button>
+  <div class="error" id="err-ps-tunggal" style="display:none"></div>
+  <div class="result" id="hasil-ps-tunggal" style="display:none"><div class="result-card"><p>Hasil Persentil</p><p id="ps-tunggal-val"></p></div></div>
+</div>
+
+<div class="section">
+  <h2>82. Persentil Data Kelompok</h2>
+  <div class="grid">
+    <div style="grid-column:1/-1"><label>Tabel kelas–frekuensi</label><textarea id="psg-data" rows="5" placeholder="20-24, 8&#10;25-29, 12&#10;30-34, 10"></textarea></div>
+    <div><label>Persentil k (1–99)</label><input type="number" id="psg-k" min="1" max="99" step="1" value="50"></div>
+  </div>
+  <p class="hint">Rumus: Pk = L₀ + c × [(k/100×n − F) / f].</p>
+  <button type="button" onclick="hitungPsKelompok()">Hitung Persentil Kelompok</button>
+  <div class="error" id="err-ps-kelompok" style="display:none"></div>
+  <div class="result" id="hasil-ps-kelompok" style="display:none"><div class="result-card"><p>Hasil Persentil</p><p id="ps-kelompok-val"></p></div></div>
+</div>
+
+
+
+<div class="group-label">Statistik & Probabilitas — lanjutan</div>
+
+<div class="section">
+  <h2>83. Jangkauan (Range)</h2>
+  <p class="formula">Range = X maksimum − X minimum</p>
+  <div class="grid" style="grid-template-columns:1fr;"><div><label>Data</label><textarea id="range-data" rows="4" placeholder="misal: 12, 15, 18, 10, 22, 17"></textarea></div></div>
+  <button type="button" onclick="hitungRangeExtra()">Hitung Range</button>
+  <div class="error" id="err-range-extra"></div><div class="result" id="hasil-range-extra"><div class="result-grid"><div class="result-card"><p>Minimum</p><p id="range-min"></p></div><div class="result-card"><p>Maksimum</p><p id="range-max"></p></div><div class="result-card"><p>Range</p><p id="range-hasil"></p></div></div></div>
+</div>
+
+<div class="section">
+  <h2>84. Varians (Ragam)</h2>
+  <p class="formula">s² = Σ(x − x̄)² / (n − 1)</p>
+  <div class="grid" style="grid-template-columns:1fr;"><div><label>Data</label><textarea id="var-data" rows="4" placeholder="misal: 10, 12, 14, 16, 18"></textarea></div></div>
+  <button type="button" onclick="hitungVariansExtra()">Hitung Varians</button>
+  <div class="error" id="err-var-extra"></div><div class="result" id="hasil-var-extra"><div class="result-grid"><div class="result-card"><p>n</p><p id="var-n"></p></div><div class="result-card"><p>Mean</p><p id="var-mean"></p></div><div class="result-card"><p>Σ(x − x̄)²</p><p id="var-ss"></p></div><div class="result-card"><p>Varians (s²)</p><p id="var-hasil"></p></div></div></div>
+</div>
+
+<div class="section">
+  <h2>85. Standar Deviasi (Simpangan Baku)</h2>
+  <p class="formula">s = √[Σ(x − x̄)² / (n − 1)]</p>
+  <div class="grid" style="grid-template-columns:1fr;"><div><label>Data</label><textarea id="sdextra-data" rows="4" placeholder="misal: 10, 12, 14, 16, 18"></textarea></div></div>
+  <button type="button" onclick="hitungSDExtra()">Hitung Standar Deviasi</button>
+  <div class="error" id="err-sdextra"></div><div class="result" id="hasil-sdextra"><div class="result-grid"><div class="result-card"><p>n</p><p id="sdextra-n"></p></div><div class="result-card"><p>Mean</p><p id="sdextra-mean"></p></div><div class="result-card"><p>Varians</p><p id="sdextra-var"></p></div><div class="result-card"><p>Standar Deviasi</p><p id="sdextra-hasil"></p></div></div></div>
+</div>
+
+<div class="section">
+  <h2>86. Koefisien Variasi</h2>
+  <p class="formula">CV (%) = (SD / |mean|) × 100</p>
+  <div class="grid" style="grid-template-columns:1fr;"><div><label>Data</label><textarea id="cvextra-data" rows="4" placeholder="misal: 10, 12, 14, 16, 18"></textarea></div></div>
+  <button type="button" onclick="hitungCVExtra()">Hitung Koefisien Variasi</button>
+  <div class="error" id="err-cvextra"></div><div class="result" id="hasil-cvextra"><div class="result-grid"><div class="result-card"><p>Mean</p><p id="cvextra-mean"></p></div><div class="result-card"><p>SD</p><p id="cvextra-sd"></p></div><div class="result-card"><p>CV</p><p id="cvextra-hasil"></p></div></div></div>
+</div>
+
+<div class="section">
+  <h2>87. Peluang</h2>
+  <p class="formula">P(A) = banyak kejadian yang diinginkan / seluruh kejadian</p>
+  <div class="grid"><div><label>Kejadian yang diinginkan</label><input type="number" id="prob-fav" min="0" step="any" placeholder="misal 3"></div><div><label>Seluruh kejadian</label><input type="number" id="prob-total" min="1" step="any" placeholder="misal 10"></div></div>
+  <button type="button" onclick="hitungPeluangExtra()">Hitung Peluang</button>
+  <div class="error" id="err-prob"></div><div class="result" id="hasil-prob"><div class="result-grid"><div class="result-card"><p>Peluang desimal</p><p id="prob-hasil"></p></div><div class="result-card"><p>Peluang persen</p><p id="prob-persen"></p></div></div></div>
+</div>
+
+<div class="section">
+  <h2>88. Distribusi Binomial</h2>
+  <p class="formula">P(X = k) = C(n,k) × p<sup>k</sup> × (1−p)<sup>n−k</sup></p>
+  <div class="grid"><div><label>Jumlah percobaan (n)</label><input type="number" id="bin-n" min="0" step="1" placeholder="misal 10"></div><div><label>Peluang sukses (p)</label><input type="number" id="bin-p" min="0" max="1" step="any" placeholder="misal 0.3"></div><div><label>Jumlah sukses (k)</label><input type="number" id="bin-k" min="0" step="1" placeholder="misal 4"></div></div>
+  <button type="button" onclick="hitungBinomialExtra()">Hitung Binomial</button>
+  <div class="error" id="err-bin"></div><div class="result" id="hasil-bin"><div class="result-grid"><div class="result-card"><p>C(n,k)</p><p id="bin-comb"></p></div><div class="result-card"><p>P(X = k)</p><p id="bin-hasil"></p></div><div class="result-card"><p>Persen</p><p id="bin-persen"></p></div></div></div>
+</div>
+
+<div class="section">
+  <h2>89. Distribusi Normal</h2>
+  <p class="formula">z = (x − μ) / σ; P(X ≤ x) = Φ(z)</p>
+  <div class="grid"><div><label>Nilai x</label><input type="number" id="nd-x" step="any" placeholder="misal 75"></div><div><label>Mean (μ)</label><input type="number" id="nd-mean" step="any" placeholder="misal 70"></div><div><label>Standar deviasi (σ)</label><input type="number" id="nd-sd" min="0.000001" step="any" placeholder="misal 8"></div></div>
+  <button type="button" onclick="hitungNormalExtra()">Hitung Distribusi Normal</button>
+  <div class="error" id="err-normdist"></div><div class="result" id="hasil-normdist"><div class="result-grid"><div class="result-card"><p>z-score</p><p id="nd-z"></p></div><div class="result-card"><p>P(X ≤ x)</p><p id="nd-cdf"></p></div><div class="result-card"><p>P(X ≤ x) dalam persen</p><p id="nd-persen"></p></div></div></div>
+</div>
+
+<div class="section">
+  <h2>90. Pengujian Hipotesis (Uji t & Uji F)</h2>
+  <p class="formula">Uji t satu sampel: t = (x̄ − μ₀) / (s/√n) &nbsp; | &nbsp; Uji F dua varians: F = s₁² / s₂²</p>
+  <div class="grid"><div><label>Data sampel untuk uji t</label><textarea id="ht-t-data" rows="4" placeholder="misal: 10, 12, 11, 13, 14"></textarea></div><div><label>Nilai hipotesis μ₀</label><input type="number" id="ht-mu0" step="any" placeholder="misal 10"></div></div>
+  <div class="grid"><div><label>Data sampel 1 untuk uji F</label><textarea id="ht-f1" rows="3" placeholder="misal: 10, 12, 11, 13, 14"></textarea></div><div><label>Data sampel 2 untuk uji F</label><textarea id="ht-f2" rows="3" placeholder="misal: 8, 9, 10, 11, 12"></textarea></div></div>
+  <button type="button" onclick="hitungHipotesisExtra()">Hitung Uji t & Uji F</button>
+  <div class="error" id="err-ht"></div><div class="result" id="hasil-ht"><div class="result-grid"><div class="result-card"><p>t hitung</p><p id="ht-t"></p></div><div class="result-card"><p>df uji t</p><p id="ht-tdf"></p></div><div class="result-card"><p>F hitung</p><p id="ht-f"></p></div><div class="result-card"><p>df1 / df2</p><p id="ht-fdf"></p></div><div class="result-card"><p>Catatan interpretasi</p><p id="ht-note"></p></div></div></div>
+</div>
+
+<div class="section">
+  <h2>91. Korelasi Pearson — Analisis Statistik</h2>
+  <p class="formula">r = (nΣxy − ΣxΣy) / √[(nΣx²−(Σx)²)(nΣy²−(Σy)²)]</p>
+  <div class="grid"><div><label>Data X</label><textarea id="corel-x" rows="4" placeholder="misal: 10, 15, 20, 25, 30"></textarea></div><div><label>Data Y</label><textarea id="corel-y" rows="4" placeholder="misal: 2, 3, 4, 5, 6"></textarea></div></div>
+  <button type="button" onclick="hitungKorelasiExtra()">Hitung Korelasi</button>
+  <div class="error" id="err-corel"></div><div class="result" id="hasil-corel"><div class="result-grid"><div class="result-card"><p>n</p><p id="corel-n"></p></div><div class="result-card"><p>Σxy</p><p id="corel-sxy"></p></div><div class="result-card"><p>Koefisien r</p><p id="corel-r"></p></div><div class="result-card"><p>Interpretasi</p><p id="corel-note"></p></div></div></div>
+</div>
+
+<div class="section">
+  <h2>92. Regresi Linear Sederhana — Analisis Statistik</h2>
+  <p class="formula">Y = a + bX; b = [nΣxy − ΣxΣy]/[nΣx² − (Σx)²]; a = ȳ − b x̄</p>
+  <div class="grid"><div><label>Data X</label><textarea id="rlex-x" rows="4" placeholder="misal: 10, 15, 20, 25, 30"></textarea></div><div><label>Data Y</label><textarea id="rlex-y" rows="4" placeholder="misal: 2, 3, 4, 5, 6"></textarea></div></div>
+  <button type="button" onclick="hitungRegresiExtra()">Hitung Regresi Linear</button>
+  <div class="error" id="err-rlex"></div><div class="result" id="hasil-rlex"><div class="result-grid"><div class="result-card"><p>Mean X</p><p id="rlex-xm"></p></div><div class="result-card"><p>Mean Y</p><p id="rlex-ym"></p></div><div class="result-card"><p>Koefisien b</p><p id="rlex-b"></p></div><div class="result-card"><p>Intersep a</p><p id="rlex-a"></p></div><div class="result-card"><p>Persamaan Y</p><p id="rlex-pers"></p></div><div class="result-card"><p>R²</p><p id="rlex-r2"></p></div></div></div>
+</div>
+
+<div class="group-label">Morfologi Tanah</div>
+
+<div class="section munsell-matte-section">
+  <h2>93. Munsell Soil Color (USDA Matte)</h2>
+  <p class="formula">Pilih Hue, Value, dan Chroma yang sesuai dengan chip warna pada Munsell Soil Color Charts. Database matte/common soil colors; entri glossy tidak digunakan.</p>
+  <div class="grid munsell-controls">
+    <div>
+      <label for="munsell-hue">Hue</label>
+      <select id="munsell-hue" aria-label="Hue Munsell"></select>
+    </div>
+    <div>
+      <label for="munsell-value">Value</label>
+      <select id="munsell-value" aria-label="Value Munsell"></select>
+    </div>
+    <div>
+      <label for="munsell-chroma">Chroma</label>
+      <select id="munsell-chroma" aria-label="Chroma Munsell"></select>
+    </div>
+  </div>
+
+  <div class="munsell-status" id="munsell-status">Pilih Hue, Value, dan Chroma untuk menampilkan warna.</div>
+  <div class="result" id="hasil-munsell">
+    <div class="munsell-result-head">
+      <div class="munsell-swatch-large" id="munsell-swatch" aria-label="Pratinjau warna Munsell"></div>
+      <div class="munsell-code-block">
+        <p class="munsell-label">Kode lengkap</p>
+        <p class="munsell-code" id="munsell-notasi">—</p>
+        <p class="munsell-name" id="munsell-name">—</p>
+      </div>
+    </div>
+
+    <div class="result-grid munsell-data-grid">
+      <div class="result-card"><p>Nama warna</p><p id="munsell-name-card">—</p></div>
+      <div class="result-card"><p>HEX</p><p id="munsell-hex">—</p></div>
+      <div class="result-card"><p>RGB</p><p id="munsell-rgb">—</p></div>
+    </div>
+
+    <div class="munsell-actions">
+      <button type="button" id="munsell-copy">📋 Salin Hasil</button>
+      <span class="munsell-copy-status" id="munsell-copy-status" aria-live="polite"></span>
+    </div>
+
+    <div class="narasi-box">
+      <p>Narasi otomatis</p>
+      <p id="narasi-munsell"></p>
+    </div>
+  </div>
+  <div class="note munsell-note">Catatan: warna digital pada layar adalah representasi RGB/HEX dari data warna dan bukan pengganti pencocokan chip fisik di lapangan. Penentuan resmi warna tanah tetap dilakukan dengan Munsell Soil Color Charts di bawah kondisi pencahayaan yang sesuai.</div>
+</div>
+
+<div class="section">
+  <h2>94. Identifikasi Horizon Tanah</h2>
+  <p class="formula">Simbol horizon master + sufiks menjelaskan proses pembentukan tanah pada lapisan tersebut</p>
+  <div class="grid">
+    <div>
+      <label>Horizon master</label>
+      <select id="horizon-master">
+        <option value="O">O — organik</option>
+        <option value="A">A — mineral permukaan</option>
+        <option value="E">E — eluviasi</option>
+        <option value="B">B — iluviasi/bawah permukaan</option>
+        <option value="C">C — bahan induk</option>
+        <option value="R">R — batuan keras (bedrock)</option>
+      </select>
+    </div>
+    <div><label>Sufiks (opsional, pisahkan koma, misal: p, g, t)</label><input type="text" id="horizon-sufiks" placeholder="misal g, t"></div>
+  </div>
+  <button onclick="hitungHorizon()">Identifikasi horizon</button>
+  <div class="error" id="err-horizon"></div>
+  <div class="result" id="hasil-horizon">
+    <div class="result-card" style="margin-bottom:14px;"><p>Simbol horizon</p><p id="horizon-simbol"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-horizon"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>95. Deskripsi Profil Tanah</h2>
+  <p class="formula">Satu horizon per baris, dipisah titik koma: Horizon;Kedalaman atas(cm);Kedalaman bawah(cm);Warna Munsell;Tekstur;Struktur;Konsistensi;Batas horizon</p>
+  <div class="grid">
+    <div style="grid-column:1/-1">
+      <label>Data profil tanah</label>
+      <textarea id="profil-data" placeholder="Ap;0;15;10YR 3/2;lempung berdebu;remah;gembur;baur&#10;Bw;15;45;10YR 4/4;lempung liat berdebu;gumpal bersudut;teguh;jelas&#10;C;45;80;2.5Y 5/3;lempung berpasir;massive;agak keras;-"></textarea>
+    </div>
+  </div>
+  <button onclick="hitungProfil()">Buat deskripsi profil</button>
+  <div class="error" id="err-profil"></div>
+  <div class="result" id="hasil-profil">
+    <div id="profil-table"></div>
+    <div class="result-card" style="margin-bottom:14px;"><p>Kedalaman solum</p><p id="profil-solum"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-profil"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>96. Kedalaman Horizon &amp; Solum</h2>
+  <p class="formula">Ketebalan horizon = kedalaman bawah - kedalaman atas; Kedalaman solum = batas bawah horizon terakhir - batas atas horizon pertama</p>
+  <div class="grid">
+    <div style="grid-column:1/-1">
+      <label>Batas kedalaman tiap horizon, satu baris per horizon (atas,bawah dalam cm)</label>
+      <textarea id="kedalaman-data" placeholder="0,15&#10;15,45&#10;45,80&#10;80,120"></textarea>
+    </div>
+  </div>
+  <button onclick="hitungKedalamanHorizon()">Hitung ketebalan &amp; solum</button>
+  <div class="error" id="err-kedalaman"></div>
+  <div class="result" id="hasil-kedalaman">
+    <div id="kedalaman-table"></div>
+    <div class="result-grid">
+      <div class="result-card"><p>Kedalaman solum total</p><p id="kedalaman-solum"></p></div>
+      <div class="result-card"><p>Klasifikasi kedalaman</p><p id="kedalaman-kelas"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-kedalaman"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>97. Struktur Tanah</h2>
+  <div class="grid">
+    <div>
+      <label>Bentuk struktur</label>
+      <select id="struktur-bentuk">
+        <option value="granular">Granular/remah</option>
+        <option value="gumpal_bersudut">Gumpal bersudut (angular blocky)</option>
+        <option value="gumpal_membulat">Gumpal membulat (subangular blocky)</option>
+        <option value="prismatik">Prismatik</option>
+        <option value="kolumnar">Kolumnar</option>
+        <option value="lempeng">Lempeng (platy)</option>
+        <option value="massive">Massive/pejal (tanpa struktur, padu)</option>
+        <option value="butir_tunggal">Butir tunggal (single grain, tanpa struktur, lepas)</option>
+      </select>
+    </div>
+    <div>
+      <label>Derajat/grade struktur</label>
+      <select id="struktur-grade">
+        <option value="tanpa">Tanpa struktur</option>
+        <option value="lemah">Lemah</option>
+        <option value="sedang" selected>Sedang</option>
+        <option value="kuat">Kuat</option>
+      </select>
+    </div>
+    <div>
+      <label>Ukuran agregat</label>
+      <select id="struktur-ukuran">
+        <option value="sangat_halus">Sangat halus</option>
+        <option value="halus" selected>Halus</option>
+        <option value="sedang">Sedang</option>
+        <option value="kasar">Kasar</option>
+        <option value="sangat_kasar">Sangat kasar</option>
+      </select>
+    </div>
+  </div>
+  <button onclick="hitungStruktur()">Interpretasi struktur</button>
+  <div class="error" id="err-struktur"></div>
+  <div class="result" id="hasil-struktur">
+    <div class="result-card" style="margin-bottom:14px;"><p>Notasi struktur</p><p id="struktur-notasi"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-struktur"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>98. Konsistensi Tanah</h2>
+  <div class="grid">
+    <div>
+      <label>Kondisi kelembaban saat pengamatan</label>
+      <select id="konsistensi-kondisi" onchange="updateKonsistensiOptions()">
+        <option value="kering">Kering</option>
+        <option value="lembab" selected>Lembab</option>
+        <option value="basah">Basah</option>
+      </select>
+    </div>
+    <div>
+      <label>Kelas konsistensi</label>
+      <select id="konsistensi-kelas"></select>
+    </div>
+  </div>
+  <button onclick="hitungKonsistensi()">Interpretasi konsistensi</button>
+  <div class="error" id="err-konsistensi"></div>
+  <div class="result" id="hasil-konsistensi">
+    <div class="result-card" style="margin-bottom:14px;"><p>Konsistensi</p><p id="konsistensi-out"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-konsistensi"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>99. Drainase Tanah</h2>
+  <div class="grid">
+    <div>
+      <label>Kelas drainase (pengamatan lapangan)</label>
+      <select id="drainase-kelas">
+        <option value="cepat">Cepat (excessively drained)</option>
+        <option value="agak_cepat">Agak cepat (somewhat excessively drained)</option>
+        <option value="baik" selected>Baik (well drained)</option>
+        <option value="agak_baik">Agak baik (moderately well drained)</option>
+        <option value="agak_buruk">Agak buruk (somewhat poorly drained)</option>
+        <option value="buruk">Buruk (poorly drained)</option>
+        <option value="sangat_buruk">Sangat buruk (very poorly drained)</option>
+      </select>
+    </div>
+  </div>
+  <button onclick="hitungDrainase()">Interpretasi drainase</button>
+  <div class="error" id="err-drainase"></div>
+  <div class="result" id="hasil-drainase">
+    <div class="result-card" style="margin-bottom:14px;"><p>Kelas drainase</p><p id="drainase-out"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-drainase"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>100. Klasifikasi Tanah (Ordo USDA Soil Taxonomy)</h2>
+  <div class="grid">
+    <div>
+      <label>Ordo tanah</label>
+      <select id="klasifikasi-ordo">
+        <option value="entisols">Entisols</option>
+        <option value="inceptisols" selected>Inceptisols</option>
+        <option value="andisols">Andisols</option>
+        <option value="alfisols">Alfisols</option>
+        <option value="ultisols">Ultisols</option>
+        <option value="oxisols">Oxisols</option>
+        <option value="vertisols">Vertisols</option>
+        <option value="mollisols">Mollisols</option>
+        <option value="aridisols">Aridisols</option>
+        <option value="spodosols">Spodosols</option>
+        <option value="histosols">Histosols</option>
+        <option value="gelisols">Gelisols</option>
+      </select>
+    </div>
+  </div>
+  <button onclick="hitungKlasifikasiTanah()">Tampilkan ciri ordo</button>
+  <div class="error" id="err-klasifikasi-ordo"></div>
+  <div class="result" id="hasil-klasifikasi-ordo">
+    <div class="result-card" style="margin-bottom:14px;"><p>Ordo</p><p id="klasifikasi-ordo-out"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-klasifikasi-ordo"></p></div>
+  </div>
+</div>
+
+<div class="group-label">Unit Converter</div>
+
+<div class="section">
+  <h2>101. ppm &harr; mg/kg</h2>
+  <p class="formula">1 ppm (basis massa) = 1 mg/kg — dua notasi untuk satuan konsentrasi yang sama</p>
+  <div class="grid">
+    <div>
+      <label>Arah konversi</label>
+      <select id="conv-ppm-arah">
+        <option value="ppm-mgkg">ppm &rarr; mg/kg</option>
+        <option value="mgkg-ppm">mg/kg &rarr; ppm</option>
+      </select>
+    </div>
+    <div><label>Nilai</label><input type="number" step="any" id="conv-ppm-nilai" placeholder="misal 12.5"></div>
+  </div>
+  <button onclick="convPpm()">Konversi</button>
+  <div class="error" id="err-conv-ppm"></div>
+  <div class="result" id="hasil-conv-ppm">
+    <div class="result-card" style="margin-bottom:14px;"><p>Hasil</p><p id="conv-ppm-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-conv-ppm"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>102. me/100g &harr; cmol(+)/kg</h2>
+  <p class="formula">1 me/100g = 1 cmol(+)/kg — notasi lama (miliekuivalen) setara dengan notasi SI (sentimol muatan)</p>
+  <div class="grid">
+    <div>
+      <label>Arah konversi</label>
+      <select id="conv-me-arah">
+        <option value="me-cmol">me/100g &rarr; cmol(+)/kg</option>
+        <option value="cmol-me">cmol(+)/kg &rarr; me/100g</option>
+      </select>
+    </div>
+    <div><label>Nilai</label><input type="number" step="any" id="conv-me-nilai" placeholder="misal 18.4"></div>
+  </div>
+  <button onclick="convMe()">Konversi</button>
+  <div class="error" id="err-conv-me"></div>
+  <div class="result" id="hasil-conv-me">
+    <div class="result-card" style="margin-bottom:14px;"><p>Hasil</p><p id="conv-me-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-conv-me"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>103. g/cm&sup3; &harr; Mg/m&sup3;</h2>
+  <p class="formula">1 g/cm3 = 1 Mg/m3 — umum dipakai untuk bobot volume (BV) dan berat jenis partikel (BJ) tanah</p>
+  <div class="grid">
+    <div>
+      <label>Arah konversi</label>
+      <select id="conv-gcm-arah">
+        <option value="gcm-mgm">g/cm3 &rarr; Mg/m3</option>
+        <option value="mgm-gcm">Mg/m3 &rarr; g/cm3</option>
+      </select>
+    </div>
+    <div><label>Nilai</label><input type="number" step="any" id="conv-gcm-nilai" placeholder="misal 1.2"></div>
+  </div>
+  <button onclick="convGcm()">Konversi</button>
+  <div class="error" id="err-conv-gcm"></div>
+  <div class="result" id="hasil-conv-gcm">
+    <div class="result-card" style="margin-bottom:14px;"><p>Hasil</p><p id="conv-gcm-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-conv-gcm"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>104. dS/m &harr; mS/cm</h2>
+  <p class="formula">1 dS/m = 1 mS/cm — satuan umum untuk Daya Hantar Listrik (DHL/EC) tanah dan air irigasi</p>
+  <div class="grid">
+    <div>
+      <label>Arah konversi</label>
+      <select id="conv-ds-arah">
+        <option value="ds-ms">dS/m &rarr; mS/cm</option>
+        <option value="ms-ds">mS/cm &rarr; dS/m</option>
+      </select>
+    </div>
+    <div><label>Nilai</label><input type="number" step="any" id="conv-ds-nilai" placeholder="misal 2.4"></div>
+  </div>
+  <button onclick="convDs()">Konversi</button>
+  <div class="error" id="err-conv-ds"></div>
+  <div class="result" id="hasil-conv-ds">
+    <div class="result-card" style="margin-bottom:14px;"><p>Hasil</p><p id="conv-ds-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-conv-ds"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>105. kg/ha &harr; g/m&sup2;</h2>
+  <p class="formula">1 kg/ha = 0,1 g/m2 (1 ha = 10.000 m2)</p>
+  <div class="grid">
+    <div>
+      <label>Arah konversi</label>
+      <select id="conv-kgha-arah">
+        <option value="kgha-gm2">kg/ha &rarr; g/m2</option>
+        <option value="gm2-kgha">g/m2 &rarr; kg/ha</option>
+      </select>
+    </div>
+    <div><label>Nilai</label><input type="number" step="any" id="conv-kgha-nilai" placeholder="misal 150"></div>
+  </div>
+  <button onclick="convKgha()">Konversi</button>
+  <div class="error" id="err-conv-kgha"></div>
+  <div class="result" id="hasil-conv-kgha">
+    <div class="result-card" style="margin-bottom:14px;"><p>Hasil</p><p id="conv-kgha-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-conv-kgha"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>106. mm &harr; L/m&sup2;</h2>
+  <p class="formula">1 mm curah hujan/air irigasi = 1 L/m2 (kedalaman air x luas 1 m2 = volume 1 L)</p>
+  <div class="grid">
+    <div>
+      <label>Arah konversi</label>
+      <select id="conv-mm-arah">
+        <option value="mm-lm2">mm &rarr; L/m2</option>
+        <option value="lm2-mm">L/m2 &rarr; mm</option>
+      </select>
+    </div>
+    <div><label>Nilai</label><input type="number" step="any" id="conv-mm-nilai" placeholder="misal 25"></div>
+  </div>
+  <button onclick="convMm()">Konversi</button>
+  <div class="error" id="err-conv-mm"></div>
+  <div class="result" id="hasil-conv-mm">
+    <div class="result-card" style="margin-bottom:14px;"><p>Hasil</p><p id="conv-mm-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-conv-mm"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>107. ton/ha &harr; kg/m&sup2;</h2>
+  <p class="formula">1 ton/ha = 0,1 kg/m2 (1 ha = 10.000 m2)</p>
+  <div class="grid">
+    <div>
+      <label>Arah konversi</label>
+      <select id="conv-tonha-arah">
+        <option value="tonha-kgm2">ton/ha &rarr; kg/m2</option>
+        <option value="kgm2-tonha">kg/m2 &rarr; ton/ha</option>
+      </select>
+    </div>
+    <div><label>Nilai</label><input type="number" step="any" id="conv-tonha-nilai" placeholder="misal 5.2"></div>
+  </div>
+  <button onclick="convTonha()">Konversi</button>
+  <div class="error" id="err-conv-tonha"></div>
+  <div class="result" id="hasil-conv-tonha">
+    <div class="result-card" style="margin-bottom:14px;"><p>Hasil</p><p id="conv-tonha-val"></p></div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-conv-tonha"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>108. Konversi Satuan Unsur Hara ke kg/ha</h2>
+  <p class="formula">Bobot tanah (kg/ha) = 100.000 x kedalaman(cm) x BV(g/cm3); Hara (kg/ha) = kadar x bobot tanah (basis % dibagi 100, basis ppm dibagi 1.000.000)</p>
+  <div class="grid">
+    <div>
+      <label>Basis kadar unsur</label>
+      <select id="convhara-basis">
+        <option value="persen">Persen (%)</option>
+        <option value="ppm">ppm (mg/kg)</option>
+      </select>
+    </div>
+    <div><label>Kadar unsur</label><input type="number" step="any" id="convhara-kadar" placeholder="misal 0.18"></div>
+    <div><label>Bobot volume / BV (g/cm3)</label><input type="number" step="0.01" id="convhara-bv" placeholder="misal 1.2"></div>
+    <div><label>Kedalaman tanah (cm)</label><input type="number" step="0.1" id="convhara-kedalaman" placeholder="misal 20"></div>
+  </div>
+  <button onclick="convHaraKgha()">Konversi ke kg/ha</button>
+  <div class="error" id="err-convhara"></div>
+  <div class="result" id="hasil-convhara">
+    <div class="result-grid">
+      <div class="result-card"><p>Bobot tanah</p><p id="convhara-bobot"></p></div>
+      <div class="result-card"><p>Kandungan hara</p><p id="convhara-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-convhara"></p></div>
+  </div>
+</div>
+
+<div class="group-label">Referensi &amp; Edukasi</div>
+
+<div class="section">
+  <h2>109. Kamus Istilah Ilmu Tanah</h2>
+  <div class="search-box"><label>Cari istilah</label><input type="text" id="kamus-search" placeholder="ketik istilah, misal: horizon, KTK, leaching..." oninput="renderKamus()"></div>
+  <div class="glossary-list" id="kamus-list"></div>
+</div>
+
+<div class="section">
+  <h2>110. Database Parameter Tanah</h2>
+  <div class="search-box"><label>Cari parameter</label><input type="text" id="dbparam-search" placeholder="ketik nama parameter, misal: pH, BV, respirasi..." oninput="renderDbParam()"></div>
+  <div id="dbparam-table"></div>
+</div>
+
+<div class="section">
+  <h2>111. Tabel Klasifikasi pH</h2>
+  <table class="profil-table">
+    <tr><th>Kelas</th><th>Kisaran pH (H2O)</th></tr>
+    <tr><td>Sangat masam</td><td>&lt; 4,5</td></tr>
+    <tr><td>Masam</td><td>4,5 - 5,5</td></tr>
+    <tr><td>Agak masam</td><td>5,5 - 6,5</td></tr>
+    <tr><td>Netral</td><td>6,5 - 7,5</td></tr>
+    <tr><td>Agak alkalis</td><td>7,5 - 8,5</td></tr>
+    <tr><td>Alkalis</td><td>&gt; 8,5</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>112. Tabel Klasifikasi C-Organik</h2>
+  <table class="profil-table">
+    <tr><th>Kelas</th><th>Kisaran C-organik (%)</th></tr>
+    <tr><td>Sangat rendah</td><td>&lt; 1</td></tr>
+    <tr><td>Rendah</td><td>1 - 2</td></tr>
+    <tr><td>Sedang</td><td>2 - 3</td></tr>
+    <tr><td>Tinggi</td><td>3 - 5</td></tr>
+    <tr><td>Sangat tinggi</td><td>&gt; 5</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>113. Tabel Klasifikasi N-Total</h2>
+  <table class="profil-table">
+    <tr><th>Kelas</th><th>Kisaran N-total (%)</th></tr>
+    <tr><td>Sangat rendah</td><td>&lt; 0,10</td></tr>
+    <tr><td>Rendah</td><td>0,10 - 0,20</td></tr>
+    <tr><td>Sedang</td><td>0,21 - 0,50</td></tr>
+    <tr><td>Tinggi</td><td>0,51 - 0,75</td></tr>
+    <tr><td>Sangat tinggi</td><td>&gt; 0,75</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>114. Tabel Klasifikasi P-Tersedia</h2>
+  <table class="profil-table">
+    <tr><th>Kelas</th><th>Kisaran P-tersedia (ppm, Bray I/Olsen)</th></tr>
+    <tr><td>Sangat rendah</td><td>&lt; 10</td></tr>
+    <tr><td>Rendah</td><td>10 - 15</td></tr>
+    <tr><td>Sedang</td><td>16 - 25</td></tr>
+    <tr><td>Tinggi</td><td>26 - 35</td></tr>
+    <tr><td>Sangat tinggi</td><td>&gt; 35</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>115. Tabel Klasifikasi K-Tukar</h2>
+  <table class="profil-table">
+    <tr><th>Kelas</th><th>Kisaran K-tukar (me/100g)</th></tr>
+    <tr><td>Sangat rendah</td><td>&lt; 0,10</td></tr>
+    <tr><td>Rendah</td><td>0,10 - 0,29</td></tr>
+    <tr><td>Sedang</td><td>0,30 - 0,59</td></tr>
+    <tr><td>Tinggi</td><td>0,60 - 1,00</td></tr>
+    <tr><td>Sangat tinggi</td><td>&gt; 1,00</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>116. Tabel Klasifikasi KTK</h2>
+  <table class="profil-table">
+    <tr><th>Kelas</th><th>Kisaran KTK (me/100g)</th></tr>
+    <tr><td>Sangat rendah</td><td>&lt; 5</td></tr>
+    <tr><td>Rendah</td><td>5 - 16</td></tr>
+    <tr><td>Sedang</td><td>17 - 24</td></tr>
+    <tr><td>Tinggi</td><td>25 - 40</td></tr>
+    <tr><td>Sangat tinggi</td><td>&gt; 40</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>117. Tabel Klasifikasi Salinitas (DHL/EC)</h2>
+  <table class="profil-table">
+    <tr><th>Kelas</th><th>Kisaran DHL (dS/m)</th><th>Pengaruh terhadap tanaman</th></tr>
+    <tr><td>Tidak salin</td><td>&lt; 2</td><td>Umumnya tidak berpengaruh nyata</td></tr>
+    <tr><td>Agak salin</td><td>2 - 4</td><td>Hasil tanaman sensitif mulai terhambat</td></tr>
+    <tr><td>Salin</td><td>4 - 8</td><td>Hasil banyak tanaman terhambat</td></tr>
+    <tr><td>Sangat salin</td><td>8 - 16</td><td>Hanya tanaman toleran salin yang tumbuh baik</td></tr>
+    <tr><td>Ekstrem salin</td><td>&gt; 16</td><td>Hanya sedikit tanaman sangat toleran yang bertahan</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>118. Tabel Klasifikasi Tekstur Tanah</h2>
+  <table class="profil-table">
+    <tr><th>Kelas tekstur</th><th>Sifat umum</th></tr>
+    <tr><td>Pasir</td><td>Drainase &amp; aerasi sangat baik, kapasitas menahan air &amp; hara sangat rendah</td></tr>
+    <tr><td>Pasir berlempung</td><td>Drainase baik, kapasitas menahan air &amp; hara rendah</td></tr>
+    <tr><td>Lempung berpasir</td><td>Drainase baik, cukup mudah diolah, kesuburan fisik sedang</td></tr>
+    <tr><td>Lempung</td><td>Keseimbangan drainase, aerasi, dan retensi air/hara paling baik untuk tanaman</td></tr>
+    <tr><td>Lempung berdebu</td><td>Menahan air baik, mudah memadat jika diolah saat basah</td></tr>
+    <tr><td>Debu</td><td>Menahan air tinggi, mudah tererosi, struktur mudah rusak</td></tr>
+    <tr><td>Lempung liat berpasir</td><td>Retensi hara mulai meningkat, drainase mulai melambat</td></tr>
+    <tr><td>Lempung liat berdebu</td><td>Retensi air &amp; hara tinggi, drainase agak lambat</td></tr>
+    <tr><td>Lempung berliat</td><td>Retensi hara tinggi, pengolahan mulai lebih berat</td></tr>
+    <tr><td>Liat berpasir</td><td>Kandungan liat tinggi, drainase lambat, mengembang-mengerut sedang</td></tr>
+    <tr><td>Liat berdebu</td><td>Kandungan liat tinggi, mudah memadat, drainase lambat</td></tr>
+    <tr><td>Liat</td><td>Kapasitas menahan air &amp; hara sangat tinggi, drainase &amp; aerasi buruk, sulit diolah</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>119. Tabel Klasifikasi Permeabilitas</h2>
+  <table class="profil-table">
+    <tr><th>Kelas</th><th>Kisaran (cm/jam)</th></tr>
+    <tr><td>Sangat lambat</td><td>&lt; 0,5</td></tr>
+    <tr><td>Lambat</td><td>0,5 - 2,0</td></tr>
+    <tr><td>Agak lambat</td><td>2,0 - 6,25</td></tr>
+    <tr><td>Sedang</td><td>6,25 - 12,5</td></tr>
+    <tr><td>Agak cepat</td><td>12,5 - 25,0</td></tr>
+    <tr><td>Cepat</td><td>&gt; 25,0</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>120. Tabel Klasifikasi Kesuburan Tanah (Evaluasi Terpadu)</h2>
+  <p class="formula">Status kesuburan tanah dievaluasi dari kombinasi KTK, Kejenuhan Basa (KB), C-organik, P-tersedia, dan K-tukar — bukan dari satu parameter saja</p>
+  <table class="profil-table">
+    <tr><th>Parameter</th><th>Skor 1 (Rendah)</th><th>Skor 2</th><th>Skor 3</th><th>Skor 4</th><th>Skor 5 (Tinggi)</th></tr>
+    <tr><td>KTK (me/100g)</td><td>&lt;5</td><td>5-16</td><td>17-24</td><td>25-40</td><td>&gt;40</td></tr>
+    <tr><td>Kejenuhan Basa (%)</td><td>&lt;20</td><td>20-35</td><td>36-50</td><td>51-70</td><td>&gt;70</td></tr>
+    <tr><td>C-organik (%)</td><td>&lt;1</td><td>1-2</td><td>2-3</td><td>3-5</td><td>&gt;5</td></tr>
+    <tr><td>P-tersedia (ppm)</td><td>&lt;10</td><td>10-15</td><td>16-25</td><td>26-35</td><td>&gt;35</td></tr>
+    <tr><td>K-tukar (me/100g)</td><td>&lt;0,1</td><td>0,1-0,29</td><td>0,3-0,59</td><td>0,6-1,0</td><td>&gt;1,0</td></tr>
+  </table>
+  <p class="hint">Cara pakai: beri skor 1-5 tiap parameter sesuai tabel di atas, lalu hitung rata-rata skor. Rata-rata &le; 2 = kesuburan rendah; 2,1 - 3,5 = kesuburan sedang; &gt; 3,5 = kesuburan tinggi. Faktor pembatas fisik (drainase buruk, permeabilitas sangat lambat/cepat, kedalaman solum dangkal) tetap perlu dipertimbangkan terpisah karena tidak tercakup dalam skor kimia ini.</p>
+</div>
+
+<div class="section">
+  <h2>121. Penjelasan Rumus</h2>
+  <details class="acc" open>
+    <summary>Kimia Tanah</summary>
+    <div class="acc-body">
+      <table>
+        <tr><th>Parameter</th><th>Rumus</th></tr>
+        <tr><td>Kejenuhan Basa (KB)</td><td>KB (%) = (Ca+Mg+K+Na tukar / KTK) x 100</td></tr>
+        <tr><td>Rasio C/N</td><td>C/N = % C-organik / % N-total</td></tr>
+        <tr><td>Kejenuhan Al</td><td>Kejenuhan Al (%) = (Al-dd / KTK efektif) x 100</td></tr>
+        <tr><td>ESP</td><td>ESP (%) = (Na tukar / KTK) x 100</td></tr>
+        <tr><td>SAR</td><td>SAR = Na / akar((Ca+Mg)/2), konsentrasi dalam me/L</td></tr>
+        <tr><td>Kebutuhan Kapur</td><td>Kapur (ton/ha) &asymp; Al-dd x 1,5 x faktor konversi kedalaman/BV</td></tr>
+      </table>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>Fisika Tanah</summary>
+    <div class="acc-body">
+      <table>
+        <tr><th>Parameter</th><th>Rumus</th></tr>
+        <tr><td>Bobot Volume (BV)</td><td>BV (g/cm3) = berat tanah kering oven / volume ring sampel</td></tr>
+        <tr><td>Total Ruang Pori (TRP)</td><td>TRP (%) = (1 - BV/BJ) x 100</td></tr>
+        <tr><td>Kadar Air Gravimetrik</td><td>KA (%) = (berat basah - berat kering) / berat kering x 100</td></tr>
+        <tr><td>Kadar Air Volumetrik</td><td>KA volumetrik (%) = KA gravimetrik (%) x BV</td></tr>
+        <tr><td>Water Filled Pore Space</td><td>WFPS (%) = (KA volumetrik / TRP) x 100</td></tr>
+        <tr><td>Air Tersedia</td><td>Air tersedia (%) = Kapasitas Lapang - Titik Layu Permanen</td></tr>
+      </table>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>Biologi Tanah</summary>
+    <div class="acc-body">
+      <table>
+        <tr><th>Parameter</th><th>Rumus</th></tr>
+        <tr><td>Total Plate Count</td><td>TPC (CFU/g) = jumlah koloni x (1/faktor pengenceran) x (1/volume yang ditanam)</td></tr>
+        <tr><td>Indeks Diversitas Shannon</td><td>H' = -&Sigma;(pi x ln(pi)), pi = proporsi kelompok ke-i</td></tr>
+        <tr><td>Biomassa Mikroba-C</td><td>BMC = (C fumigasi - C tanpa fumigasi) / kFC (kFC &asymp; 0,45)</td></tr>
+        <tr><td>Mineralisasi N Neto</td><td>N-min = (NH4+NO3 akhir) - (NH4+NO3 awal), per satuan waktu inkubasi</td></tr>
+      </table>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>Air &amp; Irigasi</summary>
+    <div class="acc-body">
+      <table>
+        <tr><th>Parameter</th><th>Rumus</th></tr>
+        <tr><td>ET0 Hargreaves-Samani</td><td>ET0 = 0,0023 x Ra x (Tmean+17,8) x akar(Tmax-Tmin)</td></tr>
+        <tr><td>ETc</td><td>ETc = ET0 x Kc (koefisien tanaman)</td></tr>
+        <tr><td>Kebutuhan Air Irigasi</td><td>Volume (m3) = kebutuhan air (mm) x luas lahan (m2) / 1000</td></tr>
+        <tr><td>Net Irrigation Requirement</td><td>NIR = ETc - curah hujan efektif</td></tr>
+        <tr><td>Gross Irrigation Requirement</td><td>GIR = NIR / efisiensi irigasi</td></tr>
+      </table>
+    </div>
+  </details>
+  <details class="acc">
+    <summary>Laboratorium &amp; Statistik</summary>
+    <div class="acc-body">
+      <table>
+        <tr><th>Parameter</th><th>Rumus</th></tr>
+        <tr><td>Pengenceran</td><td>C1V1 = C2V2</td></tr>
+        <tr><td>Molaritas</td><td>M = (massa zat terlarut / Mr) / volume larutan (L)</td></tr>
+        <tr><td>Korelasi Pearson (r)</td><td>r = &Sigma;(xi-x&#772;)(yi-y&#772;) / akar(&Sigma;(xi-x&#772;)&sup2; x &Sigma;(yi-y&#772;)&sup2;)</td></tr>
+        <tr><td>Regresi Linear</td><td>y = a + bx, b = &Sigma;(xi-x&#772;)(yi-y&#772;) / &Sigma;(xi-x&#772;)&sup2;</td></tr>
+        <tr><td>Interval Kepercayaan (CI)</td><td>CI = rata-rata &plusmn; (t-kritis x simpangan baku / akar n)</td></tr>
+      </table>
+    </div>
+  </details>
+</div>
+
+<div class="section">
+  <h2>122. Referensi Metode Analisis</h2>
+  <table class="profil-table">
+    <tr><th>Parameter</th><th>Metode analisis umum</th></tr>
+    <tr><td>pH tanah</td><td>pH meter, ekstrak H2O atau KCl 1M (rasio 1:5 atau 1:2,5)</td></tr>
+    <tr><td>C-organik</td><td>Walkley &amp; Black (titrasi oksidasi basah)</td></tr>
+    <tr><td>N-total</td><td>Kjeldahl (destruksi, destilasi, titrasi)</td></tr>
+    <tr><td>P-tersedia</td><td>Bray I (tanah masam) atau Olsen (tanah netral-alkalis), spektrofotometri</td></tr>
+    <tr><td>K, Ca, Mg, Na tukar</td><td>Ekstraksi NH4OAc 1N pH 7, diukur dengan AAS/Flame photometer</td></tr>
+    <tr><td>KTK</td><td>Ekstraksi &amp; pencucian NH4OAc 1N pH 7, destilasi-titrasi</td></tr>
+    <tr><td>DHL/Salinitas</td><td>EC meter pada ekstrak pasta jenuh atau suspensi tanah-air</td></tr>
+    <tr><td>Al-dd, H-dd</td><td>Ekstraksi KCl 1N, titrasi asam-basa</td></tr>
+    <tr><td>Tekstur tanah</td><td>Metode pipet atau hidrometer (analisis mekanik/sedimentasi)</td></tr>
+    <tr><td>BV (Bobot Volume)</td><td>Metode ring sampel (core method)</td></tr>
+    <tr><td>BJ (Berat Jenis Partikel)</td><td>Metode piknometer</td></tr>
+    <tr><td>Permeabilitas</td><td>Permeameter head konstan atau head jatuh (falling head)</td></tr>
+    <tr><td>Kapasitas Lapang &amp; TLP</td><td>Pressure plate/membrane apparatus (pF 2,54 dan pF 4,2)</td></tr>
+    <tr><td>Populasi mikroba (TPC)</td><td>Metode cawan tuang/sebar (plate count) pada media selektif</td></tr>
+    <tr><td>Respirasi tanah</td><td>Metode inkubasi tertutup, CO2 diserap NaOH lalu dititrasi HCl</td></tr>
+    <tr><td>Biomassa mikroba-C/N</td><td>Fumigasi-ekstraksi kloroform</td></tr>
+    <tr><td>Aktivitas enzim tanah</td><td>Inkubasi dengan substrat spesifik, diukur secara kolorimetri/spektrofotometri</td></tr>
+    <tr><td>Warna tanah</td><td>Perbandingan visual dengan buku bagan warna Munsell Soil Color Chart</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>123. Panduan Interpretasi Hasil</h2>
+  <ol class="guide-list">
+    <li><strong>Tabulasi seluruh data hasil analisis</strong> — susun semua parameter (kimia, fisika, biologi) dalam satu tabel ringkas sebelum mulai membahas.</li>
+    <li><strong>Bandingkan tiap parameter dengan kriteria klasifikasi baku</strong> — gunakan tabel klasifikasi (pH, C-organik, N, P, K, KTK, dll.) untuk menentukan status masing-masing parameter.</li>
+    <li><strong>Identifikasi faktor pembatas utama</strong> — cari parameter yang berstatus rendah/kurang optimal dan berpotensi paling membatasi pertumbuhan tanaman (misal pH sangat masam, P sangat rendah, atau drainase buruk).</li>
+    <li><strong>Kaitkan sifat kimia, fisika, dan biologi secara terpadu</strong> — misalnya, drainase buruk dapat menjelaskan warna tanah kelabu (gley) dan rendahnya aktivitas mikroba aerob.</li>
+    <li><strong>Hubungkan dengan konteks bahan induk dan proses pembentukan tanah</strong> — jelaskan mengapa suatu sifat muncul, bukan hanya menyebutkan angkanya (misal KTK rendah karena didominasi liat kaolinit pada Ultisols/Oxisols).</li>
+    <li><strong>Rumuskan rekomendasi pengelolaan</strong> — kaitkan hasil interpretasi dengan saran konkret (pengapuran, pemupukan, perbaikan drainase, bahan organik, dsb.) sesuai faktor pembatas yang teridentifikasi.</li>
+    <li><strong>Susun narasi pembahasan secara runtut</strong> — alur yang disarankan: kondisi umum lokasi &rarr; sifat morfologi/fisik &rarr; sifat kimia &rarr; sifat biologi &rarr; faktor pembatas &rarr; kesimpulan dan rekomendasi.</li>
+  </ol>
+</div>
+
+<div class="group-label">Olah Data Mentah Laboratorium</div>
+
+<div class="section">
+  <h2>124. C-Organik dari Data Mentah Titrasi (Metode Walkley &amp; Black)</h2>
+  <p class="formula">%C-organik = V.K2Cr2O7 &times; (1 - T/S) &times; N.FeSO4 &times; 0,003 &times; 100 / berat contoh &times; f.koreksi</p>
+  <div class="grid">
+    <div><label>Volume K2Cr2O7 (mL)</label><input type="number" step="0.01" id="corgmentah-vk2cr2o7" placeholder="misal 10"></div>
+    <div><label>Normalitas FeSO4 / Fe(NH4)2(SO4)2 (N)</label><input type="number" step="0.0001" id="corgmentah-n" placeholder="misal 0.5"></div>
+    <div><label>Titrasi blanko, S (mL)</label><input type="number" step="0.01" id="corgmentah-blanko" placeholder="misal 20"></div>
+    <div><label>Titrasi sampel, T (mL)</label><input type="number" step="0.01" id="corgmentah-sampel" placeholder="misal 12"></div>
+    <div><label>Berat contoh (g)</label><input type="number" step="0.0001" id="corgmentah-berat" placeholder="misal 0.5"></div>
+    <div><label>Faktor koreksi Walkley &amp; Black</label><input type="number" step="0.01" id="corgmentah-fk" value="1.33" placeholder="misal 1.33"></div>
+  </div>
+  <p class="hint">T = volume titran FeSO4 untuk sampel, S = volume titran FeSO4 untuk blanko (T harus lebih kecil dari S). Faktor koreksi 1,33 (setara faktor pemulihan/recovery ±76%) adalah nilai yang lazim dipakai; sesuaikan dengan SOP/modul praktikum lab masing-masing bila berbeda. Jika normalitas FeSO4 hasil standardisasi belum diketahui, hitung dulu di bagian 63 (Faktor Koreksi Larutan Titran).</p>
+  <button onclick="hitungCorgMentah()">Hitung C-organik dari data mentah</button>
+  <div class="error" id="err-corgmentah"></div>
+  <div class="result" id="hasil-corgmentah">
+    <div class="result-grid">
+      <div class="result-card"><p>Rasio T/S</p><p id="corgmentah-rasio-val"></p></div>
+      <div class="result-card"><p>C-organik</p><p id="corgmentah-val"></p></div>
+      <div class="result-card"><p>Status (kriteria umum)</p><p id="corgmentah-status-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-corgmentah"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>125. N-Total dari Data Mentah Titrasi (Metode Kjeldahl)</h2>
+  <p class="formula">%N-total = (T - S) &times; N.HCl &times; 14,008 &times; fp &times; 100 / (berat contoh (g) &times; 1000)</p>
+  <div class="grid">
+    <div><label>Volume titrasi HCl blanko, S (mL)</label><input type="number" step="0.01" id="ntotmentah-blanko" placeholder="misal 0.3"></div>
+    <div><label>Volume titrasi HCl sampel, T (mL)</label><input type="number" step="0.01" id="ntotmentah-sampel" placeholder="misal 4.2"></div>
+    <div><label>Normalitas HCl titran, N</label><input type="number" step="0.0001" id="ntotmentah-n" placeholder="misal 0.05"></div>
+    <div><label>Berat contoh tanah (gram)</label><input type="number" step="0.0001" id="ntotmentah-berat" placeholder="misal 0.25"></div>
+    <div><label>Faktor pengenceran/aliquot destilasi (fp)</label><input type="number" step="0.01" id="ntotmentah-fp" value="1" placeholder="misal 1"></div>
+  </div>
+  <p class="hint">T = volume titran untuk sampel, S = volume titran untuk blanko. Isi fp = 1 jika seluruh hasil destruksi didestilasi langsung; jika hanya sebagian aliquot destilat yang dititrasi, isi fp = volume total ekstrak destruksi / volume aliquot yang didestilasi.</p>
+  <button onclick="hitungNtotalMentah()">Hitung N-total dari data mentah</button>
+  <div class="error" id="err-ntotmentah"></div>
+  <div class="result" id="hasil-ntotmentah">
+    <div class="result-grid">
+      <div class="result-card"><p>N-total</p><p id="ntotmentah-val"></p></div>
+      <div class="result-card"><p>Status (kriteria umum)</p><p id="ntotmentah-status-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-ntotmentah"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>126. P-Tersedia dari Kurva Standar (Bray/Olsen, Spektrofotometer)</h2>
+  <p class="formula">P-tersedia (ppm) = ppm kurva standar &times; volume ekstrak (mL) &times; fp / berat contoh (g)</p>
+  <div class="grid">
+    <div><label>Konsentrasi terbaca dari kurva standar (ppm)</label><input type="number" step="0.0001" id="pmentah-ppm" placeholder="misal 0.85"></div>
+    <div><label>Volume ekstrak (mL)</label><input type="number" step="0.01" id="pmentah-vekstrak" placeholder="misal 50"></div>
+    <div><label>Faktor pengenceran (fp)</label><input type="number" step="0.01" id="pmentah-fp" value="1" placeholder="misal 1"></div>
+    <div><label>Berat contoh tanah (gram)</label><input type="number" step="0.0001" id="pmentah-berat" placeholder="misal 2.5"></div>
+  </div>
+  <button onclick="hitungPMentah()">Hitung P-tersedia dari data mentah</button>
+  <div class="error" id="err-pmentah"></div>
+  <div class="result" id="hasil-pmentah">
+    <div class="result-grid">
+      <div class="result-card"><p>P-tersedia</p><p id="pmentah-val"></p></div>
+      <div class="result-card"><p>Status (kriteria umum)</p><p id="pmentah-status-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-pmentah"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>127. Basa-Basa Dapat Ditukar dari AAS/Flamefotometer (Ca, Mg, K, Na)</h2>
+  <p class="formula">Kadar (me/100g) = (ppm terbaca &times; volume ekstrak (mL) &times; fp) / (BE unsur &times; berat contoh (g) &times; 10)</p>
+  <div class="grid">
+    <div>
+      <label>Jenis kation</label>
+      <select id="basamentah-kation">
+        <option value="ca">Ca (BE = 20,04)</option>
+        <option value="mg">Mg (BE = 12,16)</option>
+        <option value="k">K (BE = 39,10)</option>
+        <option value="na">Na (BE = 22,99)</option>
+      </select>
+    </div>
+    <div><label>Konsentrasi terbaca AAS/flamefotometer (ppm)</label><input type="number" step="0.0001" id="basamentah-ppm" placeholder="misal 3.2"></div>
+    <div><label>Volume ekstrak (mL)</label><input type="number" step="0.01" id="basamentah-vekstrak" placeholder="misal 100"></div>
+    <div><label>Faktor pengenceran (fp)</label><input type="number" step="0.01" id="basamentah-fp" value="1" placeholder="misal 1"></div>
+    <div><label>Berat contoh tanah (gram)</label><input type="number" step="0.0001" id="basamentah-berat" placeholder="misal 5"></div>
+  </div>
+  <button onclick="hitungBasaMentah()">Hitung kadar basa tukar</button>
+  <div class="error" id="err-basamentah"></div>
+  <div class="result" id="hasil-basamentah">
+    <div class="result-grid">
+      <div class="result-card"><p>Kadar (me/100g)</p><p id="basamentah-val"></p></div>
+      <div class="result-card"><p>Status (kriteria umum)</p><p id="basamentah-status-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-basamentah"></p></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>128. KTK dari Data Mentah Titrasi/Perkolasi (Metode NH4OAc)</h2>
+  <p class="formula">KTK (me/100g) = (T - S) &times; N.titran &times; 100 / berat contoh (g)</p>
+  <div class="grid">
+    <div><label>Volume titrasi blanko, S (mL)</label><input type="number" step="0.01" id="ktkmentah-blanko" placeholder="misal 0.2"></div>
+    <div><label>Volume titrasi sampel, T (mL)</label><input type="number" step="0.01" id="ktkmentah-sampel" placeholder="misal 8.5"></div>
+    <div><label>Normalitas titran, N</label><input type="number" step="0.0001" id="ktkmentah-n" placeholder="misal 0.1"></div>
+    <div><label>Berat contoh tanah (gram)</label><input type="number" step="0.0001" id="ktkmentah-berat" placeholder="misal 5"></div>
+  </div>
+  <p class="hint">T = volume titran untuk sampel hasil destilasi NH4+ yang tertukar/terperkolasi, S = volume titran untuk blanko.</p>
+  <button onclick="hitungKtkMentah()">Hitung KTK dari data mentah</button>
+  <div class="error" id="err-ktkmentah"></div>
+  <div class="result" id="hasil-ktkmentah">
+    <div class="result-grid">
+      <div class="result-card"><p>KTK</p><p id="ktkmentah-val"></p></div>
+      <div class="result-card"><p>Status (kriteria umum)</p><p id="ktkmentah-status-val"></p></div>
+    </div>
+    <div class="narasi-box"><p>Draf kalimat pembahasan</p><p id="narasi-ktkmentah"></p></div>
+  </div>
+</div>
+
+<div class="contact-box">
+  <p>Ada saran atau nemu bug? Hubungi lewat:</p>
+  <div class="contact-icons">
+    <a class="icon-email" href="mailto:putramefan94@gmail.com" title="Email: putramefan94@gmail.com">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#4285F4" d="M3 8.5V17c0 .55.45 1 1 1h2V9.9L3 8.5z"/>
+        <path fill="#34A853" d="M18 18h2c.55 0 1-.45 1-1V8.5l-3 1.4V18z"/>
+        <path fill="#EA4335" d="M3 6.5l9 6.5 9-6.5V6c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v.5z"/>
+        <path fill="#FBBC05" d="M6 9.9V6.2l6 4.3 6-4.3v3.7l-6 4.3z"/>
+        <path fill="#C5221F" d="M12 10.5L6 6.2V6c0-.55.22-1.05.59-1.41L12 8.5z"/>
+      </svg>
+    </a>
+    <a class="icon-wa" href="https://wa.link/qilbux" target="_blank" rel="noopener noreferrer" title="WhatsApp">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#fff">
+        <path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.6.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.3-.8.8-.8 1.9 0 1.1.8 2.2.9 2.4.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3z"/>
+        <path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.3c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3c-.9-1.4-1.3-3-1.3-4.6 0-4.5 3.7-8.2 8.2-8.2s8.2 3.7 8.2 8.2-3.6 8.3-8.1 8.3z"/>
+      </svg>
+    </a>
+  </div>
+</div>
+
+<footer>Kalkulator Interpretasi Data Tanah — dibuat untuk keperluan pribadi, berjalan 100% offline.</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="js/app.js?v=20261024_cat"></script>
+  <script src="js/about.js?v=1"></script>
+</body>
+</html>
